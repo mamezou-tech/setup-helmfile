@@ -9,3 +9,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: run setup helmfile
       uses: ./
+    - name: test
+      run: helmfile --version
