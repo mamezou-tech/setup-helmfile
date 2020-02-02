@@ -1,8 +1,9 @@
 name: helmfile-setup
 description: 'Setup helmfile'
 inputs:
-  kubeconfig:
-    description: 'kubernetes config'
+  helmfile-version:
+    description: 'version of helmfile'
+    default: "v0.98.2"
     required: false
 runs:
   using: 'node12'
