@@ -6,8 +6,10 @@ const baseURL = "https://github.com/roboll/helmfile/releases/download"
 
 async function downloadHelmfile(version) {
   let downloadPath;
-  downloadPath = await tc.downloadTool(`${baseURL}/${version}/helmfile_linux_amd64`);
-  console.log(downloadPath);
+  const url = `${baseURL}/${version}/helmfile_linux_amd64`;
+  console.log("downloading from : " + url);
+  downloadPath = await tc.downloadTool(url);
+  console.log("downloaded" + downloadPath);
 }
 
 module.exports = {

@@ -8,7 +8,6 @@ async function run() {
     console.log(kubeconfig);
     const helmfileVersion = "v0.98.2";
   
-    console.log('Downloading helmfile...');
     downloadHelmfile(helmfileVersion);
   
     const payload = JSON.stringify(github.context.payload, undefined, 2)
