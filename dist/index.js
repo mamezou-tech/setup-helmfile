@@ -9003,7 +9003,6 @@ const path = __webpack_require__(622);
 
 const baseURL = "https://github.com/roboll/helmfile/releases/download"
 
-
 async function downloadHelmfile(version) {
   let downloadPath;
   const url = `${baseURL}/${version}/helmfile_linux_amd64`;
@@ -9014,6 +9013,7 @@ async function downloadHelmfile(version) {
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
   await io.mv(downloadPath, path.join(binPath, "helmfile"));
+  core.addPath(binPath);
 }
 
 module.exports = {

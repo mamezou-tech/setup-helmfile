@@ -16,6 +16,7 @@ async function downloadHelmfile(version) {
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
   await io.mv(downloadPath, path.join(binPath, "helmfile"));
+  core.addPath(binPath);
 }
 
 module.exports = {
