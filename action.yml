@@ -1,0 +1,9 @@
+name: helmfile-setup
+description: 'Setup helmfile'
+inputs:
+  kubeconfig:
+    description: 'kubernetes config'
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
