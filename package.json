@@ -4,7 +4,7 @@
   "description": "Action for setup helmfile",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src/index.js",
+    "lint": "eslint src/**",
     "package": "ncc build src/index.js -o dist",
     "test": "jest"
   },
