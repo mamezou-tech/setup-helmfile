@@ -11,6 +11,6 @@ jobs:
       uses: ./
     - name: Test
       run: |
-        kubectl version
+        kubectl version --client
         helm version
         helmfile --version

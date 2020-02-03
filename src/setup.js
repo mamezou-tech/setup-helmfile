@@ -11,7 +11,7 @@ async function installKubectl(version, releaseDate) {
 }
 
 async function installHelm(version) {
-  const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`, "helm");
+  const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`);
   const folder = await extract(downloadPath);
   console.log(folder);
   await install(`${folder}/linux-amd64/helm`, "helm");
@@ -19,13 +19,13 @@ async function installHelm(version) {
 
 async function installHelmfile(version) {
   const baseUrl = "https://github.com/roboll/helmfile/releases/download"
-  downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`, "helmfile");
+  downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
   await install(downloadPath, "helmfile");
 }
 
-async function download(url, filename) {
+async function download(url) {
   let downloadPath;
-  console.log(`Downloading ${filename} from : ` + url);
+  console.log("Downloading from : " + url);
   downloadPath = await tc.downloadTool(url);
   console.log("Finish downloading. : " + downloadPath);
   return downloadPath;
