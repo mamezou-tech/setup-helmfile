@@ -10,4 +10,6 @@ jobs:
     - name: Setup helmfile
       uses: ./
     - name: Test
-      run: helmfile --version
+      run: |
+        helm --version
+        helmfile --version
