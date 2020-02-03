@@ -11,5 +11,5 @@ jobs:
       uses: ./
     - name: Test
       run: |
-        helm --version
+        helm version
         helmfile --version
