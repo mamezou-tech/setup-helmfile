@@ -4171,23 +4171,25 @@ const exec = __webpack_require__(986);
 const io = __webpack_require__(1);
 const path = __webpack_require__(622);
 
-const baseURL = "https://github.com/roboll/helmfile/releases/download"
+async function installHelmfile(version) {
+  const baseURL = "https://github.com/roboll/helmfile/releases/download"
+  install(`${baseURL}/${version}/helmfile_linux_amd64`, "helmfile");
+}
 
-async function downloadHelmfile(version) {
+async function install(url, filename) {
   let downloadPath;
-  const url = `${baseURL}/${version}/helmfile_linux_amd64`;
-  console.log("downloading from : " + url);
+  console.log(`Downloading ${filename} from : ` + url);
   downloadPath = await tc.downloadTool(url);
-  console.log("downloaded : " + downloadPath);
+  console.log("Finish downloading. : " + downloadPath);
   const binPath = "/home/runner/bin";
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
-  await io.mv(downloadPath, path.join(binPath, "helmfile"));
+  await io.mv(downloadPath, path.join(binPath, filename));
   core.addPath(binPath);
 }
 
 module.exports = {
-  downloadHelmfile
+  installHelmfile
 }
 
 
@@ -4406,12 +4408,12 @@ function isUnixExecutable(stats) {
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470);
-const {downloadHelmfile} = __webpack_require__(636);
+const { installHelmfile } = __webpack_require__(636);
 
 async function run() {
   try {
     const helmfileVersion = core.getInput("helmfile-version");
-    downloadHelmfile(helmfileVersion);
+    installHelmfile(helmfileVersion);
 
   } catch (error) {
     core.setFailed(error.message);
