@@ -4179,7 +4179,7 @@ async function installHelm(version) {
 async function installHelmfile(version) {
   const baseUrl = "https://github.com/roboll/helmfile/releases/download"
   downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`, "helmfile");
-  await install(downloadPath);
+  await install(downloadPath, "helmfile");
 }
 
 async function download(url, filename) {
@@ -4195,7 +4195,7 @@ async function extract(downloadPath, pathTo) {
   console.log(folder);
 }
 
-async function install(downloadPath) {
+async function install(downloadPath, filename) {
   const binPath = "/home/runner/bin";
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
