@@ -25,7 +25,7 @@ async function download(url, filename) {
 }
 
 async function extract(downloadPath) {
-  const folder = await tc.extractTar(downloadPath, "/home/runner/work");
+  const folder = await tc.extractTar(downloadPath);
   return folder;
 }
 
