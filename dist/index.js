@@ -4173,7 +4173,7 @@ const path = __webpack_require__(622);
 
 async function installHelm(version) {
   const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`, "helm");
-  extract(downloadPath, "/home/runner/work");
+  extract(downloadPath);
 }
 
 async function installHelmfile(version) {
@@ -4191,7 +4191,7 @@ async function download(url, filename) {
 }
 
 async function extract(downloadPath, pathTo) {
-  const folder = await tc.extractTar(downloadPath, pathTo);
+  const folder = await tc.extractTar(downloadPath, "/home/runner/work");
   console.log(folder);
 }
 
@@ -4428,7 +4428,7 @@ const { installHelm, installHelmfile } = __webpack_require__(636);
 
 async function run() {
   try {
-    //installHelm(core.getInput("helm-version"));
+    installHelm(core.getInput("helm-version"));
     installHelmfile(core.getInput("helmfile-version"));
   } catch (error) {
     core.setFailed(error.message);

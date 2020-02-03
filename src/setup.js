@@ -6,7 +6,8 @@ const path = require("path");
 
 async function installHelm(version) {
   const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`, "helm");
-  extract(downloadPath, "/home/runner/work");
+  const folder = extract(downloadPath);
+  console.log(folder);
 }
 
 async function installHelmfile(version) {
@@ -23,9 +24,9 @@ async function download(url, filename) {
   return downloadPath;
 }
 
-async function extract(downloadPath, pathTo) {
-  const folder = await tc.extractTar(downloadPath, pathTo);
-  console.log(folder);
+async function extract(downloadPath) {
+  const folder = await tc.extractTar(downloadPath, "/home/runner/work");
+  return folder;
 }
 
 async function install(downloadPath, filename) {
