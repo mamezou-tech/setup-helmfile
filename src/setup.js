@@ -19,14 +19,13 @@ async function installHelm(version) {
 
 async function installHelmfile(version) {
   const baseUrl = "https://github.com/roboll/helmfile/releases/download"
-  downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
+  const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
   await install(downloadPath, "helmfile");
 }
 
 async function download(url) {
-  let downloadPath;
   console.log("Downloading from : " + url);
-  downloadPath = await tc.downloadTool(url);
+  const downloadPath = await tc.downloadTool(url);
   console.log("Finish downloading. : " + downloadPath);
   return downloadPath;
 }
