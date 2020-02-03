@@ -1,6 +1,10 @@
 name: helmfile-setup
 description: 'Setup helmfile'
 inputs:
+  helm-version:
+    description: 'version of Helm'
+    default: "v3.0.3"
+    required: false
   helmfile-version:
     description: 'version of helmfile'
     default: "v0.98.2"

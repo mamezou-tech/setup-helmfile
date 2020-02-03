@@ -4171,16 +4171,31 @@ const exec = __webpack_require__(986);
 const io = __webpack_require__(1);
 const path = __webpack_require__(622);
 
-async function installHelmfile(version) {
-  const baseURL = "https://github.com/roboll/helmfile/releases/download"
-  install(`${baseURL}/${version}/helmfile_linux_amd64`, "helmfile");
+async function installHelm(version) {
+  const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`, "helm");
+  extract(downloadPath, "/home/runner/work");
 }
 
-async function install(url, filename) {
+async function installHelmfile(version) {
+  const baseUrl = "https://github.com/roboll/helmfile/releases/download"
+  downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`, "helmfile");
+  await install(downloadPath);
+}
+
+async function download(url, filename) {
   let downloadPath;
   console.log(`Downloading ${filename} from : ` + url);
   downloadPath = await tc.downloadTool(url);
   console.log("Finish downloading. : " + downloadPath);
+  return downloadPath;
+}
+
+async function extract(downloadPath, pathTo) {
+  const folder = await tc.extractTar(downloadPath, pathTo);
+  console.log(folder);
+}
+
+async function install(downloadPath) {
   const binPath = "/home/runner/bin";
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
@@ -4189,6 +4204,7 @@ async function install(url, filename) {
 }
 
 module.exports = {
+  installHelm,
   installHelmfile
 }
 
@@ -4408,13 +4424,12 @@ function isUnixExecutable(stats) {
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470);
-const { installHelmfile } = __webpack_require__(636);
+const { installHelm, installHelmfile } = __webpack_require__(636);
 
 async function run() {
   try {
-    const helmfileVersion = core.getInput("helmfile-version");
-    installHelmfile(helmfileVersion);
-
+    //installHelm(core.getInput("helm-version"));
+    installHelmfile(core.getInput("helmfile-version"));
   } catch (error) {
     core.setFailed(error.message);
   }

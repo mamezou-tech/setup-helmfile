@@ -1,11 +1,10 @@
 const core = require(`@actions/core`);
-const { installHelmfile } = require("./setup");
+const { installHelm, installHelmfile } = require("./setup");
 
 async function run() {
   try {
-    const helmfileVersion = core.getInput("helmfile-version");
-    installHelmfile(helmfileVersion);
-
+    //installHelm(core.getInput("helm-version"));
+    installHelmfile(core.getInput("helmfile-version"));
   } catch (error) {
     core.setFailed(error.message);
   }
