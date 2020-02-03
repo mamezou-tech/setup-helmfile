@@ -1,13 +1,21 @@
 name: helmfile-setup
 description: 'Setup helmfile'
 inputs:
+  kubectl-version:
+    description: 'kubectl (AWS edition) version'
+    default: '1.14.6'
+    required: false
+  kubectl-release-date:
+    description: 'kubectl (AWS edition) release date'
+    default: '2019-08-22'
+    required: false
   helm-version:
-    description: 'version of Helm'
+    description: 'Helm version'
     default: "v3.0.3"
     required: false
   helmfile-version:
-    description: 'version of helmfile'
-    default: "v0.98.2"
+    description: 'helmfile version'
+    default: "v0.98.3"
     required: false
 runs:
   using: 'node12'

@@ -4,6 +4,12 @@ const exec = require("@actions/exec");
 const io = require("@actions/io");
 const path = require("path");
 
+async function installKubectl(version, releaseDate) {
+  const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
+  const downloadPath = await download(`${baseUrl}/${version}/${releaseDate}/bin/linux/amd64/kubectl`);
+  await install(downloadPath, "kubectl");
+}
+
 async function installHelm(version) {
   const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`, "helm");
   const folder = await extract(downloadPath);
@@ -39,6 +45,7 @@ async function install(downloadPath, filename) {
 }
 
 module.exports = {
+  installKubectl,
   installHelm,
   installHelmfile
 }

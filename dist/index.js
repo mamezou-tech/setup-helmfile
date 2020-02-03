@@ -4171,6 +4171,12 @@ const exec = __webpack_require__(986);
 const io = __webpack_require__(1);
 const path = __webpack_require__(622);
 
+async function installKubectl(version, releaseDate) {
+  const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
+  const downloadPath = await download(`${baseUrl}/${version}/${releaseDate}/bin/linux/amd64/kubectl`);
+  await install(downloadPath, "kubectl");
+}
+
 async function installHelm(version) {
   const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`, "helm");
   const folder = await extract(downloadPath);
@@ -4206,6 +4212,7 @@ async function install(downloadPath, filename) {
 }
 
 module.exports = {
+  installKubectl,
   installHelm,
   installHelmfile
 }
@@ -4426,10 +4433,11 @@ function isUnixExecutable(stats) {
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470);
-const { installHelm, installHelmfile } = __webpack_require__(636);
+const { installKubectl, installHelm, installHelmfile } = __webpack_require__(636);
 
 async function run() {
   try {
+    installKubectl(core.getInput("kubectl-version"), core.getInput("kubectl-release-date"));
     installHelm(core.getInput("helm-version"));
     installHelmfile(core.getInput("helmfile-version"));
   } catch (error) {
