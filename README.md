@@ -1,7 +1,7 @@
 @mamezou-tech/setup-helmfile
 ============================
 
-![GitHub Actions](https://github.com/mamezou-tech/setup-helmfile/workflows/CI/badge.svg)
+![CI](https://github.com/mamezou-tech/setup-helmfile/workflows/CI/badge.svg)
 
 Setup [helmfile](https://github.com/roboll/helmfile) with Helm and kubectl in GitHub Actions.
 
