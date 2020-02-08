@@ -10,19 +10,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kondoumh/setup-helmfile.git"
+    "url": "git+https://github.com/mamezou-tech/setup-helmfile.git"
   },
   "keywords": [
     "GitHub",
     "Actions",
     "helmfile"
   ],
-  "author": "kondoumh",
+  "author": "mamezou-tech",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kondoumh/setup-helmfile/issues"
+    "url": "https://github.com/mamezou-tech/setup-helmfile/issues"
   },
-  "homepage": "https://github.com/kondoumh/setup-helmfile#readme",
+  "homepage": "https://github.com/mamezou-tech/setup-helmfile#readme",
   "dependencies": {
     "@actions/core": "^1.2.2",
     "@actions/exec": "^1.0.3",
