@@ -12,8 +12,8 @@ jobs:
     - name: Test
       run: |
         which kubectl
-        kubectl version --client
+        ~/bin/kubectl version --client
         which helm
-        helm version
+        ~/bin/helm version
         which helmfile
-        helmfile --version
+        ~/bin/helmfile --version
