@@ -30,16 +30,16 @@ describe('Normal', () => {
   test('Test installKubectl', async () => {
     await installKubectl("1.14.6", "2019-08-22");
     expect(downloadToolMock.mock.calls[0][0]).toBe("https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl");
-    expect(mvMock.mock.calls[0][1]).toBe(`${sp}home${sp}runner${sp}bin${sp}kubectl`);
+    expect(mvMock.mock.calls[0][1]).toBe(`~${sp}bin${sp}kubectl`);
   });
   test('Test installHelm', async () => {
     await installHelm("v3.0.3");
     expect(downloadToolMock.mock.calls[0][0]).toBe("https://get.helm.sh/helm-v3.0.3-linux-amd64.tar.gz");
-    expect(mvMock.mock.calls[0][1]).toBe(`${sp}home${sp}runner${sp}bin${sp}helm`);
+    expect(mvMock.mock.calls[0][1]).toBe(`~${sp}bin${sp}helm`);
   });
   test('Test installHelmfile', async () => {
     await installHelmfile("v0.98.3");
     expect(downloadToolMock.mock.calls[0][0]).toBe("https://github.com/roboll/helmfile/releases/download/v0.98.3/helmfile_linux_amd64");
-    expect(mvMock.mock.calls[0][1]).toBe(`${sp}home${sp}runner${sp}bin${sp}helmfile`);
+    expect(mvMock.mock.calls[0][1]).toBe(`~${sp}bin${sp}helmfile`);
   });
 });

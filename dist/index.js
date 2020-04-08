@@ -4203,7 +4203,7 @@ async function extract(downloadPath) {
 }
 
 async function install(downloadPath, filename) {
-  const binPath = "/home/runner/bin";
+  const binPath = "~/bin";
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
   await io.mv(downloadPath, path.join(binPath, filename));
