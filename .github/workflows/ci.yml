@@ -14,4 +14,4 @@ jobs:
         ls -l ~/bin
         kubectl version --client
         helm version
-#        helmfile --version
+        helmfile --version

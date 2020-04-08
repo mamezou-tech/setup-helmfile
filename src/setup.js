@@ -3,6 +3,7 @@ const tc = require("@actions/tool-cache");
 const exec = require("@actions/exec");
 const io = require("@actions/io");
 const path = require("path");
+const os = require("os");
 
 async function installKubectl(version, releaseDate) {
   const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
@@ -36,7 +37,7 @@ async function extract(downloadPath) {
 }
 
 async function install(downloadPath, filename) {
-  const binPath = "~/bin";
+  const binPath = `${os.homedir}/bin`;
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
   await io.mv(downloadPath, path.join(binPath, filename));

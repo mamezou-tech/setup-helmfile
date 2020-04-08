@@ -4170,6 +4170,7 @@ const tc = __webpack_require__(533);
 const exec = __webpack_require__(986);
 const io = __webpack_require__(1);
 const path = __webpack_require__(622);
+const os = __webpack_require__(87);
 
 async function installKubectl(version, releaseDate) {
   const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
@@ -4203,7 +4204,7 @@ async function extract(downloadPath) {
 }
 
 async function install(downloadPath, filename) {
-  const binPath = "~/bin";
+  const binPath = `${os.homedir}/bin`;
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
   await io.mv(downloadPath, path.join(binPath, filename));
