@@ -24,16 +24,16 @@
   },
   "homepage": "https://github.com/mamezou-tech/setup-helmfile#readme",
   "dependencies": {
-    "@actions/core": "^1.2.2",
+    "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
-    "@actions/github": "^2.1.0",
+    "@actions/github": "^2.1.1",
     "@actions/io": "^1.0.2",
-    "@actions/tool-cache": "^1.3.1"
+    "@actions/tool-cache": "^1.3.3"
   },
   "devDependencies": {
-    "@zeit/ncc": "^0.21.0",
+    "@zeit/ncc": "^0.21.1",
     "eslint": "^6.8.0",
-    "minimist": ">=0.2.1",
-    "jest": "^25.1.0"
+    "jest": "^25.2.7",
+    "minimist": ">=0.2.1"
   }
 }
