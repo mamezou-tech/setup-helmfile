@@ -13,4 +13,4 @@ jobs:
       run: |
         kubectl version --client
         helm version
-        helmfile --version
+#        helmfile --version
