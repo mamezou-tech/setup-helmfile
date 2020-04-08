@@ -1467,6 +1467,13 @@ exports.setFailed = setFailed;
 // Logging Commands
 //-----------------------------------------------------------------------
 /**
+ * Gets whether Actions Step Debug is on or not
+ */
+function isDebug() {
+    return process.env['RUNNER_DEBUG'] === '1';
+}
+exports.isDebug = isDebug;
+/**
  * Writes debug message to user log
  * @param message debug message
  */
@@ -1597,9 +1604,12 @@ const os = __importStar(__webpack_require__(87));
 const path = __importStar(__webpack_require__(622));
 const httpm = __importStar(__webpack_require__(539));
 const semver = __importStar(__webpack_require__(550));
+const stream = __importStar(__webpack_require__(794));
+const util = __importStar(__webpack_require__(669));
 const v4_1 = __importDefault(__webpack_require__(826));
 const exec_1 = __webpack_require__(986);
 const assert_1 = __webpack_require__(357);
+const retry_helper_1 = __webpack_require__(979);
 class HTTPError extends Error {
     constructor(httpStatusCode) {
         super(`Unexpected HTTP response: ${httpStatusCode}`);
@@ -1610,31 +1620,6 @@ class HTTPError extends Error {
 exports.HTTPError = HTTPError;
 const IS_WINDOWS = process.platform === 'win32';
 const userAgent = 'actions/tool-cache';
-// On load grab temp directory and cache directory and remove them from env (currently don't want to expose this)
-let tempDirectory = process.env['RUNNER_TEMP'] || '';
-let cacheRoot = process.env['RUNNER_TOOL_CACHE'] || '';
-// If directories not found, place them in common temp locations
-if (!tempDirectory || !cacheRoot) {
-    let baseLocation;
-    if (IS_WINDOWS) {
-        // On windows use the USERPROFILE env variable
-        baseLocation = process.env['USERPROFILE'] || 'C:\\';
-    }
-    else {
-        if (process.platform === 'darwin') {
-            baseLocation = '/Users';
-        }
-        else {
-            baseLocation = '/home';
-        }
-    }
-    if (!tempDirectory) {
-        tempDirectory = path.join(baseLocation, 'actions', 'temp');
-    }
-    if (!cacheRoot) {
-        cacheRoot = path.join(baseLocation, 'actions', 'cache');
-    }
-}
 /**
  * Download a tool from an url and stream it into a file
  *
@@ -1644,52 +1629,71 @@ if (!tempDirectory || !cacheRoot) {
  */
 function downloadTool(url, dest) {
     return __awaiter(this, void 0, void 0, function* () {
-        // Wrap in a promise so that we can resolve from within stream callbacks
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const http = new httpm.HttpClient(userAgent, [], {
-                    allowRetries: true,
-                    maxRetries: 3
-                });
-                dest = dest || path.join(tempDirectory, v4_1.default());
-                yield io.mkdirP(path.dirname(dest));
-                core.debug(`Downloading ${url}`);
-                core.debug(`Downloading ${dest}`);
-                if (fs.existsSync(dest)) {
-                    throw new Error(`Destination file path ${dest} already exists`);
+        dest = dest || path.join(_getTempDirectory(), v4_1.default());
+        yield io.mkdirP(path.dirname(dest));
+        core.debug(`Downloading ${url}`);
+        core.debug(`Destination ${dest}`);
+        const maxAttempts = 3;
+        const minSeconds = _getGlobal('TEST_DOWNLOAD_TOOL_RETRY_MIN_SECONDS', 10);
+        const maxSeconds = _getGlobal('TEST_DOWNLOAD_TOOL_RETRY_MAX_SECONDS', 20);
+        const retryHelper = new retry_helper_1.RetryHelper(maxAttempts, minSeconds, maxSeconds);
+        return yield retryHelper.execute(() => __awaiter(this, void 0, void 0, function* () {
+            return yield downloadToolAttempt(url, dest || '');
+        }), (err) => {
+            if (err instanceof HTTPError && err.httpStatusCode) {
+                // Don't retry anything less than 500, except 408 Request Timeout and 429 Too Many Requests
+                if (err.httpStatusCode < 500 &&
+                    err.httpStatusCode !== 408 &&
+                    err.httpStatusCode !== 429) {
+                    return false;
                 }
-                const response = yield http.get(url);
-                if (response.message.statusCode !== 200) {
-                    const err = new HTTPError(response.message.statusCode);
-                    core.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
-                    throw err;
-                }
-                const file = fs.createWriteStream(dest);
-                file.on('open', () => __awaiter(this, void 0, void 0, function* () {
-                    try {
-                        const stream = response.message.pipe(file);
-                        stream.on('close', () => {
-                            core.debug('download complete');
-                            resolve(dest);
-                        });
-                    }
-                    catch (err) {
-                        core.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
-                        reject(err);
-                    }
-                }));
-                file.on('error', err => {
-                    file.end();
-                    reject(err);
-                });
             }
-            catch (err) {
-                reject(err);
-            }
-        }));
+            // Otherwise retry
+            return true;
+        });
     });
 }
 exports.downloadTool = downloadTool;
+function downloadToolAttempt(url, dest) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (fs.existsSync(dest)) {
+            throw new Error(`Destination file path ${dest} already exists`);
+        }
+        // Get the response headers
+        const http = new httpm.HttpClient(userAgent, [], {
+            allowRetries: false
+        });
+        const response = yield http.get(url);
+        if (response.message.statusCode !== 200) {
+            const err = new HTTPError(response.message.statusCode);
+            core.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
+            throw err;
+        }
+        // Download the response body
+        const pipeline = util.promisify(stream.pipeline);
+        const responseMessageFactory = _getGlobal('TEST_DOWNLOAD_TOOL_RESPONSE_MESSAGE_FACTORY', () => response.message);
+        const readStream = responseMessageFactory();
+        let succeeded = false;
+        try {
+            yield pipeline(readStream, fs.createWriteStream(dest));
+            core.debug('download complete');
+            succeeded = true;
+            return dest;
+        }
+        finally {
+            // Error, delete dest before retry
+            if (!succeeded) {
+                core.debug('download failed');
+                try {
+                    yield io.rmRF(dest);
+                }
+                catch (err) {
+                    core.debug(`Failed to delete '${dest}'. ${err.message}`);
+                }
+            }
+        }
+    });
+}
 /**
  * Extract a .7z file
  *
@@ -1779,14 +1783,17 @@ function extractTar(file, dest, flags = 'xz') {
         // Create dest
         dest = yield _createExtractFolder(dest);
         // Determine whether GNU tar
+        core.debug('Checking tar --version');
         let versionOutput = '';
         yield exec_1.exec('tar --version', [], {
             ignoreReturnCode: true,
+            silent: true,
             listeners: {
                 stdout: (data) => (versionOutput += data.toString()),
                 stderr: (data) => (versionOutput += data.toString())
             }
         });
+        core.debug(versionOutput.trim());
         const isGnuTar = versionOutput.toUpperCase().includes('GNU TAR');
         // Initialize args
         const args = [flags];
@@ -1947,7 +1954,7 @@ function find(toolName, versionSpec, arch) {
     let toolPath = '';
     if (versionSpec) {
         versionSpec = semver.clean(versionSpec) || '';
-        const cachePath = path.join(cacheRoot, toolName, versionSpec, arch);
+        const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
         core.debug(`checking cache: ${cachePath}`);
         if (fs.existsSync(cachePath) && fs.existsSync(`${cachePath}.complete`)) {
             core.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
@@ -1969,7 +1976,7 @@ exports.find = find;
 function findAllVersions(toolName, arch) {
     const versions = [];
     arch = arch || os.arch();
-    const toolPath = path.join(cacheRoot, toolName);
+    const toolPath = path.join(_getCacheDirectory(), toolName);
     if (fs.existsSync(toolPath)) {
         const children = fs.readdirSync(toolPath);
         for (const child of children) {
@@ -1988,7 +1995,7 @@ function _createExtractFolder(dest) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!dest) {
             // create a temp dir
-            dest = path.join(tempDirectory, v4_1.default());
+            dest = path.join(_getTempDirectory(), v4_1.default());
         }
         yield io.mkdirP(dest);
         return dest;
@@ -1996,7 +2003,7 @@ function _createExtractFolder(dest) {
 }
 function _createToolPath(tool, version, arch) {
     return __awaiter(this, void 0, void 0, function* () {
-        const folderPath = path.join(cacheRoot, tool, semver.clean(version) || version, arch || '');
+        const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
         core.debug(`destination ${folderPath}`);
         const markerPath = `${folderPath}.complete`;
         yield io.rmRF(folderPath);
@@ -2006,7 +2013,7 @@ function _createToolPath(tool, version, arch) {
     });
 }
 function _completeToolPath(tool, version, arch) {
-    const folderPath = path.join(cacheRoot, tool, semver.clean(version) || version, arch || '');
+    const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || '');
     const markerPath = `${folderPath}.complete`;
     fs.writeFileSync(markerPath, '');
     core.debug('finished caching tool');
@@ -2042,6 +2049,31 @@ function _evaluateVersions(versions, versionSpec) {
         core.debug('match not found');
     }
     return version;
+}
+/**
+ * Gets RUNNER_TOOL_CACHE
+ */
+function _getCacheDirectory() {
+    const cacheDirectory = process.env['RUNNER_TOOL_CACHE'] || '';
+    assert_1.ok(cacheDirectory, 'Expected RUNNER_TOOL_CACHE to be defined');
+    return cacheDirectory;
+}
+/**
+ * Gets RUNNER_TEMP
+ */
+function _getTempDirectory() {
+    const tempDirectory = process.env['RUNNER_TEMP'] || '';
+    assert_1.ok(tempDirectory, 'Expected RUNNER_TEMP to be defined');
+    return tempDirectory;
+}
+/**
+ * Gets a global variable
+ */
+function _getGlobal(key, defaultValue) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const value = global[key];
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+    return value !== undefined ? value : defaultValue;
 }
 //# sourceMappingURL=tool-cache.js.map
 
@@ -2081,12 +2113,22 @@ var HttpCodes;
     HttpCodes[HttpCodes["RequestTimeout"] = 408] = "RequestTimeout";
     HttpCodes[HttpCodes["Conflict"] = 409] = "Conflict";
     HttpCodes[HttpCodes["Gone"] = 410] = "Gone";
+    HttpCodes[HttpCodes["TooManyRequests"] = 429] = "TooManyRequests";
     HttpCodes[HttpCodes["InternalServerError"] = 500] = "InternalServerError";
     HttpCodes[HttpCodes["NotImplemented"] = 501] = "NotImplemented";
     HttpCodes[HttpCodes["BadGateway"] = 502] = "BadGateway";
     HttpCodes[HttpCodes["ServiceUnavailable"] = 503] = "ServiceUnavailable";
     HttpCodes[HttpCodes["GatewayTimeout"] = 504] = "GatewayTimeout";
 })(HttpCodes = exports.HttpCodes || (exports.HttpCodes = {}));
+var Headers;
+(function (Headers) {
+    Headers["Accept"] = "accept";
+    Headers["ContentType"] = "content-type";
+})(Headers = exports.Headers || (exports.Headers = {}));
+var MediaTypes;
+(function (MediaTypes) {
+    MediaTypes["ApplicationJson"] = "application/json";
+})(MediaTypes = exports.MediaTypes || (exports.MediaTypes = {}));
 /**
  * Returns the proxy URL, depending upon the supplied url and proxy environment variables.
  * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
@@ -2189,22 +2231,29 @@ class HttpClient {
      * Gets a typed object from an endpoint
      * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
      */
-    async getJson(requestUrl, additionalHeaders) {
+    async getJson(requestUrl, additionalHeaders = {}) {
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
         let res = await this.get(requestUrl, additionalHeaders);
         return this._processResponse(res, this.requestOptions);
     }
-    async postJson(requestUrl, obj, additionalHeaders) {
+    async postJson(requestUrl, obj, additionalHeaders = {}) {
         let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
         let res = await this.post(requestUrl, data, additionalHeaders);
         return this._processResponse(res, this.requestOptions);
     }
-    async putJson(requestUrl, obj, additionalHeaders) {
+    async putJson(requestUrl, obj, additionalHeaders = {}) {
         let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
         let res = await this.put(requestUrl, data, additionalHeaders);
         return this._processResponse(res, this.requestOptions);
     }
-    async patchJson(requestUrl, obj, additionalHeaders) {
+    async patchJson(requestUrl, obj, additionalHeaders = {}) {
         let data = JSON.stringify(obj, null, 2);
+        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
         let res = await this.patch(requestUrl, data, additionalHeaders);
         return this._processResponse(res, this.requestOptions);
     }
@@ -2390,6 +2439,14 @@ class HttpClient {
             return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers));
         }
         return lowercaseKeys(headers || {});
+    }
+    _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
+        const lowercaseKeys = obj => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {});
+        let clientHeader;
+        if (this.requestOptions && this.requestOptions.headers) {
+            clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
+        }
+        return additionalHeaders[header] || clientHeader || _default;
     }
     _getAgent(parsedUrl) {
         let agent;
@@ -4170,6 +4227,7 @@ const tc = __webpack_require__(533);
 const exec = __webpack_require__(986);
 const io = __webpack_require__(1);
 const path = __webpack_require__(622);
+const os = __webpack_require__(87);
 
 async function installKubectl(version, releaseDate) {
   const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
@@ -4203,7 +4261,7 @@ async function extract(downloadPath) {
 }
 
 async function install(downloadPath, filename) {
-  const binPath = "/home/runner/bin";
+  const binPath = `${os.homedir}/bin`;
   await io.mkdirP(binPath);
   await exec.exec("chmod", ["+x", downloadPath]);
   await io.mv(downloadPath, path.join(binPath, filename));
@@ -4489,6 +4547,13 @@ module.exports = require("fs");
 
 /***/ }),
 
+/***/ 794:
+/***/ (function(module) {
+
+module.exports = require("stream");
+
+/***/ }),
+
 /***/ 826:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -4594,6 +4659,83 @@ function checkBypass(reqUrl) {
 }
 exports.checkBypass = checkBypass;
 
+
+/***/ }),
+
+/***/ 979:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(__webpack_require__(470));
+/**
+ * Internal class for retries
+ */
+class RetryHelper {
+    constructor(maxAttempts, minSeconds, maxSeconds) {
+        if (maxAttempts < 1) {
+            throw new Error('max attempts should be greater than or equal to 1');
+        }
+        this.maxAttempts = maxAttempts;
+        this.minSeconds = Math.floor(minSeconds);
+        this.maxSeconds = Math.floor(maxSeconds);
+        if (this.minSeconds > this.maxSeconds) {
+            throw new Error('min seconds should be less than or equal to max seconds');
+        }
+    }
+    execute(action, isRetryable) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let attempt = 1;
+            while (attempt < this.maxAttempts) {
+                // Try
+                try {
+                    return yield action();
+                }
+                catch (err) {
+                    if (isRetryable && !isRetryable(err)) {
+                        throw err;
+                    }
+                    core.info(err.message);
+                }
+                // Sleep
+                const seconds = this.getSleepAmount();
+                core.info(`Waiting ${seconds} seconds before trying again`);
+                yield this.sleep(seconds);
+                attempt++;
+            }
+            // Last attempt
+            return yield action();
+        });
+    }
+    getSleepAmount() {
+        return (Math.floor(Math.random() * (this.maxSeconds - this.minSeconds + 1)) +
+            this.minSeconds);
+    }
+    sleep(seconds) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+        });
+    }
+}
+exports.RetryHelper = RetryHelper;
+//# sourceMappingURL=retry-helper.js.map
 
 /***/ }),
 
