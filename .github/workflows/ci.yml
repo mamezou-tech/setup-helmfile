@@ -15,4 +15,5 @@ jobs:
         kubectl version --client
         which helm
         helm version
-#        helmfile --version
+        which helmfile
+        helmfile --version
