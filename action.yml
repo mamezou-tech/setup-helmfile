@@ -1,4 +1,4 @@
-name: helmfile-setup
+name: setup-helmfile
 description: 'Setup helmfile Action'
 author: "mamezou-tech"
 branding:
