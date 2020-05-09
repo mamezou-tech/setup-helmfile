@@ -1,6 +1,9 @@
 name: helmfile-setup
 description: 'Setup helmfile Action'
 author: "mamezou-tech"
+branding:
+  icon: 'arrow-right-circle'
+  color: 'purple'
 inputs:
   kubectl-version:
     description: "kubectl (AWS edition) version"
