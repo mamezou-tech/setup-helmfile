@@ -39,8 +39,8 @@ async function extract(downloadPath) {
 async function install(downloadPath, filename) {
   const binPath = `${os.homedir}/bin`;
   await io.mkdirP(binPath);
-  await exec.exec("chmod", ["+x", downloadPath]);
   await io.mv(downloadPath, path.join(binPath, filename));
+  await exec.exec("chmod", ["+x", `${binPath}/${filename}`]);
   core.addPath(binPath);
 }
 
