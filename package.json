@@ -1,6 +1,6 @@
 {
   "name": "setup-helmfile",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Action for setup helmfile",
   "main": "index.js",
   "scripts": {

@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.2.2
+      uses: mamezou-tech/setup-helmfile@v0.2.3
     - name: Test
       run: |
         helmfile --version
@@ -43,7 +43,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.2.2
+      uses: mamezou-tech/setup-helmfile@v0.2.3
       with:
         helmfile-version: "v0.99.2"
     - name: Test
