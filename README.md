@@ -3,7 +3,7 @@
 
 ![CI](https://github.com/mamezou-tech/setup-helmfile/workflows/CI/badge.svg)
 
-Setup [helmfile](https://github.com/roboll/helmfile) with Helm and kubectl in GitHub Actions.
+Setup [helmfile](https://github.com/roboll/helmfile) with Helm and kubectl in GitHub Actions workflow.
 
 > - The AWS version of kubectl is installed.
 > - This action works on Linux.
