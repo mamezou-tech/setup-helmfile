@@ -4314,6 +4314,7 @@ async function installHelm(version) {
 
 async function installHelmPlugins() {
   await exec.exec("helm plugin install https://github.com/databus23/helm-diff --version master");
+  await exec.exec("helm plugin install https://github.com/hypnoglow/helm-s3.git");
 }
 
 async function installHelmfile(version) {
