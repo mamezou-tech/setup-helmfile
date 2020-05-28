@@ -4312,6 +4312,10 @@ async function installHelm(version) {
   await install(`${folder}/linux-amd64/helm`, "helm");
 }
 
+async function installHelmPlugins() {
+  await exec.exec("helm", ["plugin install https://github.com/databus23/helm-diff --version master"]);
+}
+
 async function installHelmfile(version) {
   const baseUrl = "https://github.com/roboll/helmfile/releases/download"
   const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
@@ -4341,6 +4345,7 @@ async function install(downloadPath, filename) {
 module.exports = {
   installKubectl,
   installHelm,
+  installHelmPlugins,
   installHelmfile
 }
 
@@ -4560,12 +4565,13 @@ function isUnixExecutable(stats) {
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470);
-const { installKubectl, installHelm, installHelmfile } = __webpack_require__(636);
+const { installKubectl, installHelm, installHelmPlugins, installHelmfile } = __webpack_require__(636);
 
 async function run() {
   try {
     installKubectl(core.getInput("kubectl-version"), core.getInput("kubectl-release-date"));
     installHelm(core.getInput("helm-version"));
+    installHelmPlugins();
     installHelmfile(core.getInput("helmfile-version"));
   } catch (error) {
     core.setFailed(error.message);
