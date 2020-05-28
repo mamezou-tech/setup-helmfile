@@ -18,6 +18,11 @@ async function installHelm(version) {
   await install(`${folder}/linux-amd64/helm`, "helm");
 }
 
+async function installHelmPlugins() {
+  await exec.exec("helm plugin install https://github.com/databus23/helm-diff --version master");
+  await exec.exec("helm plugin install https://github.com/hypnoglow/helm-s3.git");
+}
+
 async function installHelmfile(version) {
   const baseUrl = "https://github.com/roboll/helmfile/releases/download"
   const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
@@ -47,5 +52,6 @@ async function install(downloadPath, filename) {
 module.exports = {
   installKubectl,
   installHelm,
+  installHelmPlugins,
   installHelmfile
 }

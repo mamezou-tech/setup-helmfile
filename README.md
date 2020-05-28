@@ -8,6 +8,9 @@ Setup [helmfile](https://github.com/roboll/helmfile) with Helm and kubectl in Gi
 > - The AWS version of kubectl is installed.
 > - This action works on Linux.
 > - Helm 2.x is not supported.
+> - Following Helm plugins will be installed
+>   - helm-diff
+>   - helm-s3
 
 ```yaml
 name: CI
@@ -18,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.2.4
+      uses: mamezou-tech/setup-helmfile@v0.3.0
     - name: Test
       run: |
         helmfile --version
@@ -43,9 +46,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.2.4
+      uses: mamezou-tech/setup-helmfile@v0.3.0
       with:
-        helmfile-version: "v0.99.2"
+        helmfile-version: "v0.118.0"
     - name: Test
       run: |
         helmfile --version
