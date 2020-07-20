@@ -7,19 +7,19 @@ branding:
 inputs:
   kubectl-version:
     description: "kubectl (AWS edition) version"
-    default: "1.14.6"
+    default: "1.15.11"
     required: false
   kubectl-release-date:
     description: "kubectl (AWS edition) release date"
-    default: "2019-08-22"
+    default: "2020-07-08"
     required: false
   helm-version:
     description: "Helm version"
-    default: "v3.0.3"
+    default: "v3.2.4"
     required: false
   helmfile-version:
     description: "helmfile version"
-    default: "v0.98.3"
+    default: "v0.122.1"
     required: false
 runs:
   using: "node12"
