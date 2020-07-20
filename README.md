@@ -30,10 +30,12 @@ jobs:
 ```
 
 ## Optional Inputs
-- `helmfile-version` : helmfile version. Default `"v0.99.3"`.
-- `helm-version` : Helmfile version. Default `"v3.0.3"`
-- `kubectl-version` : kubectl version. Default `1.14.6`
-- `kubectl-release-date` : kubectl release date. Default `2019-08-22`
+- `helmfile-version` : helmfile version. Default `"v0.122.1"`.
+- `helm-version` : Helmfile version. Default `"v3.2.4"`
+- `kubectl-version` : kubectl version. Default `1.15.11`
+- `kubectl-release-date` : kubectl release date. Default `2020-07-08`
+
+> See "[Installing kubectl - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)" for information how to specify the kubectl version.
 
 Example with optional inputs
 
