@@ -31,7 +31,7 @@ jobs:
 
 ## Optional Inputs
 - `helmfile-version` : helmfile version. Default `"v0.122.1"`.
-- `helm-version` : Helmfile version. Default `"v3.2.4"`
+- `helm-version` : Helm version. Default `"v3.2.4"`
 - `kubectl-version` : kubectl version. Default `1.15.11`
 - `kubectl-release-date` : kubectl release date. Default `2020-07-08`
 
