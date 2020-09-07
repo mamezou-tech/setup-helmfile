@@ -21,6 +21,14 @@ inputs:
     description: "helmfile version"
     default: "v0.122.1"
     required: false
+  install-kubectl:
+    description: "Install kubectl"
+    default: "yes"
+    required: false
+  install-helm:
+    description: "Install helm"
+    default: "yes"
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"

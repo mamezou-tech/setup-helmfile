@@ -3,9 +3,13 @@ const { installKubectl, installHelm, installHelmPlugins, installHelmfile } = req
 
 async function run() {
   try {
-    installKubectl(core.getInput("kubectl-version"), core.getInput("kubectl-release-date"));
-    installHelm(core.getInput("helm-version"));
-    installHelmPlugins();
+    if (core.getInput("install-kubectl") === "yes") {
+      installKubectl(core.getInput("kubectl-version"), core.getInput("kubectl-release-date"));
+    }
+    if (core.getInput("install-helm") === "yes") {
+      installHelm(core.getInput("helm-version"));
+      installHelmPlugins();
+    }
     installHelmfile(core.getInput("helmfile-version"));
   } catch (error) {
     core.setFailed(error.message);
