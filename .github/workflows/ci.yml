@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  install_all:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -16,3 +16,19 @@ jobs:
         helm version
         helm plugin list
         helmfile --version
+
+  install_only_helmfile:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup helmfile
+      uses: ./
+      with:
+        install-kubectl: no
+        install-helm: no
+    - name: Test
+      run: |
+        ls -l ~/bin
+        helmfile --version
+        kubectl version --client
+        helm version
