@@ -65,7 +65,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.5.0
+      uses: mamezou-tech/setup-helmfile@v0.6.0
       with:
         install-kubectl: no
         install-helm: no
