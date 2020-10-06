@@ -1,6 +1,6 @@
 {
   "name": "setup-helmfile",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Action for setup helmfile",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/mamezou-tech/setup-helmfile#readme",
   "dependencies": {
-    "@actions/core": "^1.2.5",
+    "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/github": "^4.0.0",
     "@actions/io": "^1.0.2",
@@ -32,8 +32,8 @@
   },
   "devDependencies": {
     "@zeit/ncc": "^0.22.3",
-    "eslint": "^7.8.1",
-    "jest": "^26.4.2",
+    "eslint": "^7.10.0",
+    "jest": "^26.5.0",
     "minimist": ">=0.2.1"
   }
 }
