@@ -21,7 +21,7 @@ async function installHelm(version) {
 async function installHelmPlugins() {
   await exec.exec("helm plugin install https://github.com/databus23/helm-diff --version master");
   await exec.exec("helm plugin install https://github.com/hypnoglow/helm-s3.git");
-  await exec.exec("helm plugin install https://github.com/futuresimple/helm-secrets");
+  await exec.exec("helm plugin install https://github.com/zendesk/helm-secrets");
 }
 
 async function installHelmfile(version) {
