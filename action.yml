@@ -29,6 +29,10 @@ inputs:
     description: "Install helm"
     default: "yes"
     required: false
+  install-helm-plugins:
+    description: "Install Helm plugins"
+    default: "yes"
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
