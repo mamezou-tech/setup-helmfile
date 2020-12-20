@@ -36,13 +36,14 @@ jobs:
   install_helm_plugins_without_helm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup helmfile
-        uses: ./
-        with:
-          install-kubectl: no
-          install-helm: no
-      - name: Test
+    - uses: actions/checkout@v2
+    - name: Setup helmfile
+      uses: ./
+      with:
+        install-kubectl: no
+        install-helm: no
+    - name: Test
+      run: |
         ls -l ~/bin
         helmfile --version
         kubectl version --client
