@@ -8,6 +8,8 @@ async function run() {
     }
     if (core.getInput("install-helm") === "yes") {
       installHelm(core.getInput("helm-version"));
+    }
+    if (core.getInput("install-helm-plugins") === "yes") {
       installHelmPlugins();
     }
     installHelmfile(core.getInput("helmfile-version"));

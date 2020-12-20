@@ -3,24 +3,40 @@ name: CI
 on: [pull_request, workflow_dispatch]
 
 jobs:
-  install_all:
+  install_all_default:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Setup helmfile
       uses: ./
     - name: Test
       run: |
         ls -l ~/bin
+        helmfile --version
         kubectl version --client
         helm version
         helm plugin list
-        helmfile --version
 
-  install_only_helmfile:
+  install_helmfile_with_version:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+    - name: Setup helmfile
+      uses: ./
+      with:
+        helmfile-version: "v0.135.0"
+    - name: Test
+      run: |
+        ls -l ~/bin
+        helmfile --version
+        kubectl version --client
+        helm version
+        helm plugin list
+
+  install_helm_plugins_without_helm:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
     - name: Setup helmfile
       uses: ./
       with:
@@ -32,3 +48,22 @@ jobs:
         helmfile --version
         kubectl version --client
         helm version
+        helm plugin list
+
+  install_only_helmfile:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup helmfile
+      uses: ./
+      with:
+        install-kubectl: no
+        install-helm: no
+        install-helm-plugins: no
+    - name: Test
+      run: |
+        ls -l ~/bin
+        helmfile --version
+        kubectl version --client
+        helm version
+        helm plugin list

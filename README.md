@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.5.0
+      uses: mamezou-tech/setup-helmfile@v0.7.0
     - name: Test
       run: |
         helmfile --version
@@ -35,6 +35,7 @@ jobs:
 - `kubectl-release-date` : kubectl release date. Default `2020-08-04`
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
+- `install-helm-plugins` : Install Helm plugins. Default `yes`
 
 > See "[Installing kubectl - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)" for information how to specify the kubectl version.
 
@@ -47,28 +48,39 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.5.0
+      uses: mamezou-tech/setup-helmfile@v0.7.0
       with:
-        helmfile-version: "v0.118.0"
+        helmfile-version: "v0.135.0"
 ```
 
-If you want use default kubectl / Helm installed in GitHub Runner. you can specify inputs to not install them.
+If you are not particular about the version of kubectl / Helm and you can use the versions pre-installed on GitHub Actions runner, you can specify inputs not to install them. 
+
+> Notice: Helm plugins will be installed in this case.
 
 ```yaml
-name: CI
-on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.6.0
+      uses: mamezou-tech/setup-helmfile@v0.7.0
       with:
         install-kubectl: no
         install-helm: no
+```
+
+If you don't want helm plugins installed, specify `no` for `install-helm-plugins`.
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup helmfile
+      uses: mamezou-tech/setup-helmfile@v0.7.0
+      with:
+        install-helm-plugins: no
 ```
 
 ### Build action (for maintainer)
