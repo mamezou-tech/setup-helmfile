@@ -4,9 +4,10 @@
   "description": "Action for setup helmfile",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src/** --ignore-pattern **/*.test.js",
-    "package": "ncc build src/index.js -o dist",
-    "test": "jest"
+    "lint": "cd wrapper && npm run lint && cd .. eslint src/** --ignore-pattern **/*.test.js",
+    "package": "cd wrapper && npm run build && cd .. && ncc build src/index.js -o dist",
+    "test": "cd wrapper && npm test && cd .. && jest",
+    "postinstall": "cd wrapper && npm install"
   },
   "repository": {
     "type": "git",

@@ -4610,7 +4610,39 @@ async function installHelmPlugins() {
 async function installHelmfile(version) {
   const baseUrl = "https://github.com/roboll/helmfile/releases/download"
   const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
-  await install(downloadPath, "helmfile");
+  return await install(downloadPath, "helmfile");
+}
+
+async function installHelmfileWrapper(pathToCLI) {
+  let source, target;
+
+  // If we're on Windows, then the executable ends with .exe
+  const exeSuffix = os.platform().startsWith('win') ? '.exe' : '';
+
+  // Rename helmfile(.exe) to helmfile-bin(.exe)
+  try {
+    source = [pathToCLI, `helmfile${exeSuffix}`].join(path.sep);
+    target = [pathToCLI, `helmfile-bin${exeSuffix}`].join(path.sep);
+    core.debug(`Moving ${source} to ${target}.`);
+    await io.mv(source, target);
+  } catch (e) {
+    core.error(`Unable to move ${source} to ${target}.`);
+    throw e;
+  }
+
+  // Install our wrapper as helmfile
+  try {
+    source = __webpack_require__.ab + "index1.js";
+    target = [pathToCLI, 'helmfile'].join(path.sep);
+    core.debug(`Copying ${source} to ${target}.`);
+    await io.cp(__webpack_require__.ab + "index1.js", target);
+  } catch (e) {
+    core.error(`Unable to copy ${source} to ${target}.`);
+    throw e;
+  }
+
+  // Export a new environment variable, so our wrapper can locate the binary
+  core.exportVariable('HELMFILE_CLI_PATH', pathToCLI);
 }
 
 async function download(url) {
@@ -4627,17 +4659,20 @@ async function extract(downloadPath) {
 
 async function install(downloadPath, filename) {
   const binPath = `${os.homedir}/bin`;
+  const dstPath = path.join(binPath, filename);
   await io.mkdirP(binPath);
-  await io.cp(downloadPath, path.join(binPath, filename));
-  await exec.exec("chmod", ["+x", `${binPath}/${filename}`]);
+  await io.cp(downloadPath, dstPath);
+  await exec.exec("chmod", ["+x", dstPath]);
   core.addPath(binPath);
+  return binPath;
 }
 
 module.exports = {
   installKubectl,
   installHelm,
   installHelmPlugins,
-  installHelmfile
+  installHelmfile,
+  installHelmfileWrapper
 }
 
 
@@ -4856,20 +4891,27 @@ function isUnixExecutable(stats) {
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470);
-const { installKubectl, installHelm, installHelmPlugins, installHelmfile } = __webpack_require__(636);
+const { installKubectl, installHelm, installHelmPlugins, installHelmfile, installHelmfileWrapper } = __webpack_require__(636);
 
 async function run() {
   try {
-    if (core.getInput("install-kubectl") === "yes") {
-      installKubectl(core.getInput("kubectl-version"), core.getInput("kubectl-release-date"));
-    }
-    if (core.getInput("install-helm") === "yes") {
-      installHelm(core.getInput("helm-version"));
-    }
-    if (core.getInput("install-helm-plugins") === "yes") {
-      installHelmPlugins();
-    }
-    installHelmfile(core.getInput("helmfile-version"));
+    const [pathToCLI] = await Promise.all([
+      installHelmfile(core.getInput("helmfile-version")),
+      core.getInput("install-kubectl") === "yes"
+        ? installKubectl(core.getInput("kubectl-version"), core.getInput("kubectl-release-date"))
+        : undefined,
+      core.getInput("install-helm") === "yes"
+        ? installHelm(core.getInput("helm-version"))
+        : undefined,
+    ]);
+    await Promise.all([
+      core.getInput("install-helm-plugins") === "yes"
+        ? installHelmPlugins()
+        : undefined,
+      core.getInput("install-wrapper") === "yes"
+        ? installHelmfileWrapper(pathToCLI)
+        : undefined,
+    ]);
   } catch (error) {
     core.setFailed(error.message);
   }

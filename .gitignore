@@ -102,3 +102,6 @@ typings/
 
 # TernJS port file
 .tern-port
+
+# ./wrapper/dist gets included in top-level ./dist
+wrapper/dist

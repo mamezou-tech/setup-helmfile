@@ -1,0 +1,28 @@
+{
+  "name": "helmfile.js",
+  "version": "0.0.1",
+  "description": "JavaScript wrapper for helmfile binary",
+  "license": "MIT",
+  "author": "mamezou-tech",
+  "main": "helmfile.js",
+  "scripts": {
+    "test": "semistandard --env jest && jest --coverage",
+    "lint": "semistandard --env jest --fix",
+    "build": "ncc build helmfile.js --out dist"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
+    "@actions/io": "^1.0.2"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "0.22.1",
+    "jest": "^25.4.0",
+    "semistandard": "^14.2.0"
+  },
+  "semistandard": {
+    "ignore": [
+      "dist/**"
+    ]
+  }
+}

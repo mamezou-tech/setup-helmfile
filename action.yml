@@ -33,6 +33,10 @@ inputs:
     description: "Install Helm plugins"
     default: "yes"
     required: false
+  install-wrapper:
+    description: "Install Helmfile wrapper"
+    default: "no"
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
