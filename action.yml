@@ -33,6 +33,10 @@ inputs:
     description: "Install Helm plugins"
     default: "yes"
     required: false
+  additional-helm-plugins:
+    description: |
+      A comma separated list of additional helm plugins to install. Should be a valid argument after `helm plugin install`.
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
