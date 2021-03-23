@@ -18,9 +18,10 @@ async function installHelm(version) {
   await install(`${folder}/linux-amd64/helm`, "helm");
 }
 
-async function installHelmPlugins() {
-  await exec.exec("helm plugin install https://github.com/databus23/helm-diff --version master");
-  await exec.exec("helm plugin install https://github.com/hypnoglow/helm-s3.git");
+async function installHelmPlugins(plugins) {
+  for (const plugin of plugins) {
+    await exec.exec(`helm plugin install ${plugin}`);
+  }
 }
 
 async function installHelmfile(version) {

@@ -10,7 +10,14 @@ async function run() {
       installHelm(core.getInput("helm-version"));
     }
     if (core.getInput("install-helm-plugins") === "yes") {
-      installHelmPlugins();
+      installHelmPlugins([
+        'https://github.com/databus23/helm-diff --version master',
+        'https://github.com/hypnoglow/helm-s3.git',
+      ]);
+    }
+    const additionalPlugins = core.getInput("additional-helm-plugins")
+    if (additionalPlugins !== "") {
+      installHelmPlugins(additionalPlugins.split(','));
     }
     installHelmfile(core.getInput("helmfile-version"));
   } catch (error) {
