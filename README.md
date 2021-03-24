@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.7.0
+      uses: mamezou-tech/setup-helmfile@v0.8.0
     - name: Test
       run: |
         helmfile --version
@@ -36,6 +36,7 @@ jobs:
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
 - `install-helm-plugins` : Install Helm plugins. Default `yes`
+- `additional-helm-plugins` : A comma separated list of additional helm plugins to install. Should be a valid argument after `helm plugin install`.
 
 > See "[Installing kubectl - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)" for information how to specify the kubectl version.
 
@@ -49,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.7.0
+      uses: mamezou-tech/setup-helmfile@v0.8.0
       with:
         helmfile-version: "v0.135.0"
 ```
@@ -64,10 +65,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.7.0
+      uses: mamezou-tech/setup-helmfile@v0.8.0
       with:
         install-kubectl: no
         install-helm: no
+```
+
+If you want to install certain plugins other than the default plugins, use `additional-helm-plugins`, which accepts a comma separated list of additional plugins to install, accepting anything that can be passed to `helm plugin install`.
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup helmfile
+      uses: mamezou-tech/setup-helmfile@0.8.0
+      with:
+        additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0
 ```
 
 If you don't want helm plugins installed, specify `no` for `install-helm-plugins`.
@@ -78,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.7.0
+      uses: mamezou-tech/setup-helmfile@v0.8.0
       with:
         install-helm-plugins: no
 ```
