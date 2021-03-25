@@ -29,10 +29,10 @@ jobs:
 ```
 
 ## Optional Inputs
-- `helmfile-version` : helmfile version. Default `"v0.126.2"`.
-- `helm-version` : Helm version. Default `"v3.3.1"`
-- `kubectl-version` : kubectl version. Default `1.16.13`
-- `kubectl-release-date` : kubectl release date. Default `2020-08-04`
+- `helmfile-version` : helmfile version. Default `"v0.138.7"`.
+- `helm-version` : Helm version. Default `"v3.5.3"`
+- `kubectl-version` : kubectl version. Default `1.19.6`
+- `kubectl-release-date` : kubectl release date. Default `2021-01-05`
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
 - `install-helm-plugins` : Install Helm plugins. Default `yes`
