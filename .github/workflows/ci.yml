@@ -67,3 +67,19 @@ jobs:
         kubectl version --client
         helm version
         helm plugin list
+
+  install_addtional_plugin:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup helmfile
+      uses: ./
+      with:
+        additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0
+    - name: Test
+      run: |
+        ls -l ~/bin
+        helmfile --version
+        kubectl version --client
+        helm version
+        helm plugin list
