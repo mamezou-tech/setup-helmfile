@@ -18,4 +18,5 @@ exclude-labels:
   - 'exclude from changelog'
 template: |
   ## Changes
+
   $CHANGES
