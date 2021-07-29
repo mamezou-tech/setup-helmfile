@@ -11,6 +11,14 @@ async function installKubectl(version, releaseDate) {
   await install(downloadPath, "kubectl");
 }
 
+async function installVals(version) {
+  const baseUrl = "https://github.com/variantdev/vals/releases/download";
+  const downloadPath = await download(`${baseUrl}/v${version}/vals_${version}_linux_amd64.tar.gz`);
+  const folder = await extract(downloadPath);
+  console.log(folder);
+  await install(`${folder}/vals_${version}_linux_amd64/vals`, "vals");
+}
+
 async function installHelm(version) {
   const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`);
   const folder = await extract(downloadPath);
@@ -52,6 +60,7 @@ async function install(downloadPath, filename) {
 
 module.exports = {
   installKubectl,
+  installVals,
   installHelm,
   installHelmPlugins,
   installHelmfile

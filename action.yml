@@ -13,6 +13,10 @@ inputs:
     description: "kubectl (AWS edition) release date"
     default: "2021-01-05"
     required: false
+  vals-version:
+    description: "vals version"
+    default: "0.14.0"
+    required: false
   helm-version:
     description: "Helm version"
     default: "v3.5.3"
@@ -23,6 +27,10 @@ inputs:
     required: false
   install-kubectl:
     description: "Install kubectl"
+    default: "yes"
+    required: false
+  install-vals:
+    description: "vals version"
     default: "yes"
     required: false
   install-helm:
