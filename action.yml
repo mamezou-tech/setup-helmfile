@@ -17,6 +17,10 @@ inputs:
     description: "vals version"
     default: "0.14.0"
     required: false
+  sops-version:
+    description: "sops version"
+    default: "v3.7.1"
+    required: false
   helm-version:
     description: "Helm version"
     default: "v3.5.3"
@@ -30,7 +34,11 @@ inputs:
     default: "yes"
     required: false
   install-vals:
-    description: "vals version"
+    description: "install vals"
+    default: "yes"
+    required: false
+  install-sops:
+    description: "install sops"
     default: "yes"
     required: false
   install-helm:

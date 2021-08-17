@@ -4603,6 +4603,12 @@ async function installVals(version) {
   await install(`${folder}/vals_${version}_linux_amd64/vals`, "vals");
 }
 
+async function installSops(version) {
+  const baseUrl = "https://github.com/mozilla/sops/releases/download";
+  const downloadPath = await download(`${baseUrl}/${version}/sops-${version}.linux`);
+  await install(downloadPath, "sops");
+}
+
 async function installHelm(version) {
   const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`);
   const folder = await extract(downloadPath);
@@ -4645,6 +4651,7 @@ async function install(downloadPath, filename) {
 module.exports = {
   installKubectl,
   installVals,
+  installSops,
   installHelm,
   installHelmPlugins,
   installHelmfile
@@ -4866,7 +4873,7 @@ function isUnixExecutable(stats) {
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470);
-const { installKubectl, installVals, installHelm, installHelmPlugins, installHelmfile } = __webpack_require__(636);
+const { installKubectl, installVals, installSops, installHelm, installHelmPlugins, installHelmfile } = __webpack_require__(636);
 
 async function run() {
   try {
@@ -4875,6 +4882,9 @@ async function run() {
     }
     if (core.getInput("install-vals") === "yes") {
       installVals(core.getInput("vals-version"));
+    }
+    if (core.getInput("install-sops") === "yes") {
+      installSops(core.getInput("sops-version"));
     }
     if (core.getInput("install-helm") === "yes") {
       installHelm(core.getInput("helm-version"));

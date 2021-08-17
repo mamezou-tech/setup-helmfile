@@ -19,6 +19,12 @@ async function installVals(version) {
   await install(`${folder}/vals_${version}_linux_amd64/vals`, "vals");
 }
 
+async function installSops(version) {
+  const baseUrl = "https://github.com/mozilla/sops/releases/download";
+  const downloadPath = await download(`${baseUrl}/${version}/sops-${version}.linux`);
+  await install(downloadPath, "sops");
+}
+
 async function installHelm(version) {
   const downloadPath = await download(`https://get.helm.sh/helm-${version}-linux-amd64.tar.gz`);
   const folder = await extract(downloadPath);
@@ -61,6 +67,7 @@ async function install(downloadPath, filename) {
 module.exports = {
   installKubectl,
   installVals,
+  installSops,
   installHelm,
   installHelmPlugins,
   installHelmfile
