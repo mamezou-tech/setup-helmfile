@@ -33,6 +33,14 @@ inputs:
     description: "Install Helm plugins"
     default: "yes"
     required: false
+  helm-diff-plugin-version:
+    description: "Version of the helm diff plugin to install"
+    default: "master"
+    required: false
+  helm-s3-plugin-version:
+    description: "Version of the helm s3 plugin to install"
+    default: "master"
+    required: false
   additional-helm-plugins:
     description: |
       A comma separated list of additional helm plugins to install. Should be a valid argument after `helm plugin install`.

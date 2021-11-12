@@ -36,6 +36,8 @@ jobs:
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
 - `install-helm-plugins` : Install Helm plugins. Default `yes`
+- `helm-diff-plugin-version` : Plugin version to install. Default `master`
+- `helm-s3-plugin-version` : Plugin version to install. Default `master`
 - `additional-helm-plugins` : A comma separated list of additional helm plugins to install. Should be a valid argument after `helm plugin install`.
 
 > See "[Installing kubectl - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)" for information how to specify the kubectl version.
