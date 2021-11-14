@@ -19,7 +19,7 @@ inputs:
     required: false
   helmfile-version:
     description: "helmfile version"
-    default: "v0.138.7"
+    default: "v0.142.0"
     required: false
   install-kubectl:
     description: "Install kubectl"
