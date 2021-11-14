@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@0.8.0
+      uses: mamezou-tech/setup-helmfile@v0.9.0
       with:
         additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0
 ```
