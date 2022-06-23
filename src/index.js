@@ -7,7 +7,7 @@ async function run() {
       installKubectl(core.getInput("kubectl-version"), core.getInput("kubectl-release-date"));
     }
     if (core.getInput("install-helm") === "yes") {
-      installHelm(core.getInput("helm-version"));
+      await installHelm(core.getInput("helm-version"));
     }
     if (core.getInput("install-helm-plugins") === "yes") {
       installHelmPlugins([
