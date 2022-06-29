@@ -4987,7 +4987,7 @@ async function installHelmPlugins(plugins) {
 }
 
 async function installHelmfile(version) {
-  if (semvercompare(version.replace(/^v/,), "0.145.0") >= 0) {
+  if (semvercompare(version.replace(/^v/, ''), "0.145.0") >= 0) {
     await installHelmfileNew(version);
   } else {
     await installHelmfileOld(version);
