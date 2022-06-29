@@ -26,7 +26,7 @@ async function installHelmPlugins(plugins) {
 }
 
 async function installHelmfile(version) {
-  if (semvercompare(version, "0.145.0") >= 0) {
+  if (semvercompare(version.replace(/^v/,''), "0.145.0") >= 0) {
     var baseUrl = "https://github.com/helmfile/helmfile/releases/download"
   } else {
     var baseUrl = "https://github.com/roboll/helmfile/releases/download"
