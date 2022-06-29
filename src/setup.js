@@ -4,6 +4,7 @@ const exec = require("@actions/exec");
 const io = require("@actions/io");
 const path = require("path");
 const os = require("os");
+const semvercompare = require("semver-compare");
 
 async function installKubectl(version, releaseDate) {
   const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
@@ -25,7 +26,11 @@ async function installHelmPlugins(plugins) {
 }
 
 async function installHelmfile(version) {
-  const baseUrl = "https://github.com/roboll/helmfile/releases/download"
+  if (semvercompare(version, "0.145.0") >= 0) {
+    var baseUrl = "https://github.com/helmfile/helmfile/releases/download"
+  } else {
+    var baseUrl = "https://github.com/roboll/helmfile/releases/download"
+  }
   const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
   await install(downloadPath, "helmfile");
 }
