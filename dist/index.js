@@ -3691,6 +3691,26 @@ exports.getIDToken = getIDToken;
 
 /***/ }),
 
+/***/ 523:
+/***/ (function(module) {
+
+module.exports = function cmp (a, b) {
+    var pa = a.split('.');
+    var pb = b.split('.');
+    for (var i = 0; i < 3; i++) {
+        var na = Number(pa[i]);
+        var nb = Number(pb[i]);
+        if (na > nb) return 1;
+        if (nb > na) return -1;
+        if (!isNaN(na) && isNaN(nb)) return 1;
+        if (isNaN(na) && !isNaN(nb)) return -1;
+    }
+    return 0;
+};
+
+
+/***/ }),
+
 /***/ 533:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -4945,6 +4965,7 @@ const exec = __webpack_require__(986);
 const io = __webpack_require__(1);
 const path = __webpack_require__(622);
 const os = __webpack_require__(87);
+const semvercompare = __webpack_require__(523);
 
 async function installKubectl(version, releaseDate) {
   const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
@@ -4966,9 +4987,25 @@ async function installHelmPlugins(plugins) {
 }
 
 async function installHelmfile(version) {
+  if (semvercompare(version.replace(/^v/,), "0.145.0") >= 0) {
+    await installHelmfileNew(version);
+  } else {
+    await installHelmfileOld(version);
+  }
+}
+
+async function installHelmfileOld(version) {
   const baseUrl = "https://github.com/roboll/helmfile/releases/download"
   const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
   await install(downloadPath, "helmfile");
+}
+
+async function installHelmfileNew(version) {
+  const baseUrl = "https://github.com/helmfile/helmfile/releases/download"
+  const downloadPath = await download(`${baseUrl}/${version}/helmfile_${version.replace(/^v/,'')}_linux_amd64.tar.gz`)
+  const folder = await extract(downloadPath);
+  console.log(folder);
+  await install(`${folder}/helmfile`, "helmfile");
 }
 
 async function download(url) {
@@ -5204,7 +5241,7 @@ async function run() {
       installKubectl(core.getInput("kubectl-version"), core.getInput("kubectl-release-date"));
     }
     if (core.getInput("install-helm") === "yes") {
-      installHelm(core.getInput("helm-version"));
+      await installHelm(core.getInput("helm-version"));
     }
     if (core.getInput("install-helm-plugins") === "yes") {
       installHelmPlugins([
