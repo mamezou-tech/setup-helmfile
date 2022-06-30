@@ -29,10 +29,10 @@ jobs:
 ```
 
 ## Optional Inputs
-- `helmfile-version` : helmfile version. Default `"v0.142.0"`.
-- `helm-version` : Helm version. Default `"v3.7.1"`
-- `kubectl-version` : kubectl version. Default `1.21.2`
-- `kubectl-release-date` : kubectl release date. Default `2021-07-05`
+- `helmfile-version` : helmfile version. Default `"v0.145.0"`.
+- `helm-version` : Helm version. Default `"v3.7.2"`
+- `kubectl-version` : kubectl version. Default `1.22.9`
+- `kubectl-release-date` : kubectl release date. Default `2022-06-03`
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
 - `install-helm-plugins` : Install Helm plugins. Default `yes`
@@ -57,7 +57,7 @@ jobs:
         helmfile-version: "v0.135.0"
 ```
 
-If you are not particular about the version of kubectl / Helm and you can use the versions pre-installed on GitHub Actions runner, you can specify inputs not to install them. 
+If you are not particular about the version of kubectl / Helm and you can use the versions pre-installed on GitHub Actions runner, you can specify inputs not to install them.
 
 > Notice: Helm plugins will be installed in this case.
 
