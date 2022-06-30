@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.9.0
+      uses: mamezou-tech/setup-helmfile@v1
     - name: Test
       run: |
         helmfile --version
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.9.0
+      uses: mamezou-tech/setup-helmfile@v1
       with:
         helmfile-version: "v0.135.0"
 ```
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.9.0
+      uses: mamezou-tech/setup-helmfile@v1
       with:
         install-kubectl: no
         install-helm: no
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.9.0
+      uses: mamezou-tech/setup-helmfile@v1
       with:
         additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0
 ```
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v0.9.0
+      uses: mamezou-tech/setup-helmfile@v1
       with:
         install-helm-plugins: no
 ```
