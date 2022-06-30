@@ -4988,12 +4988,24 @@ async function installHelmPlugins(plugins) {
 
 async function installHelmfile(version) {
   if (semvercompare(version.replace(/^v/,''), "0.145.0") >= 0) {
-    var baseUrl = "https://github.com/helmfile/helmfile/releases/download"
+    await installHelmfileNew(version);
   } else {
-    var baseUrl = "https://github.com/roboll/helmfile/releases/download"
+    await installHelmfileOld(version);
   }
+}
+
+async function installHelmfileOld(version) {
+  const baseUrl = "https://github.com/roboll/helmfile/releases/download"
   const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
   await install(downloadPath, "helmfile");
+}
+
+async function installHelmfileNew(version) {
+  const baseUrl = "https://github.com/helmfile/helmfile/releases/download"
+  const downloadPath = await download(`${baseUrl}/${version}/helmfile_${version.replace(/^v/,'')}_linux_amd64.tar.gz`)
+  const folder = await extract(downloadPath);
+  console.log(folder);
+  await install(`${folder}/helmfile`, "helmfile");
 }
 
 async function download(url) {
