@@ -43,4 +43,14 @@ describe('Normal', () => {
     expect(downloadToolMock.mock.calls[0][0]).toBe("https://github.com/roboll/helmfile/releases/download/v0.98.3/helmfile_linux_amd64");
     expect(cpMock.mock.calls[0][1]).toBe(`${os.homedir}${sp}bin${sp}helmfile`);
   });
+  test('Test installHelmfile - new version', async () => {
+    await installHelmfile("v0.145.0");
+    expect(downloadToolMock.mock.calls[0][0]).toBe("https://github.com/helmfile/helmfile/releases/download/v0.145.0/helmfile_0.145.0_linux_amd64.tar.gz");
+    expect(cpMock.mock.calls[0][1]).toBe(`${os.homedir}${sp}bin${sp}helmfile`);
+  });
+  test('Test installHelmfile - new version', async () => {
+    await installHelmfile("v0.148.1");
+    expect(downloadToolMock.mock.calls[0][0]).toBe("https://github.com/helmfile/helmfile/releases/download/v0.148.1/helmfile_0.148.1_linux_amd64.tar.gz");
+    expect(cpMock.mock.calls[0][1]).toBe(`${os.homedir}${sp}bin${sp}helmfile`);
+  });
 });
