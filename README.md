@@ -18,9 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.0.0
+      uses: mamezou-tech/setup-helmfile@v1.1.0
     - name: Test
       run: |
         helmfile --version
@@ -29,10 +29,10 @@ jobs:
 ```
 
 ## Optional Inputs
-- `helmfile-version` : helmfile version. Default `"v0.145.0"`.
-- `helm-version` : Helm version. Default `"v3.7.2"`
-- `kubectl-version` : kubectl version. Default `1.22.9`
-- `kubectl-release-date` : kubectl release date. Default `2022-06-03`
+- `helmfile-version` : helmfile version. Default `"v0.147.0"`.
+- `helm-version` : Helm version. Default `"v3.10.1"`
+- `kubectl-version` : kubectl version. Default `1.23.7`
+- `kubectl-release-date` : kubectl release date. Default `2022-06-29`
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
 - `install-helm-plugins` : Install Helm plugins. Default `yes`
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.0.0
+      uses: mamezou-tech/setup-helmfile@v1.1.0
       with:
         helmfile-version: "v0.135.0"
 ```
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.0.0
+      uses: mamezou-tech/setup-helmfile@v1.1.0
       with:
         install-kubectl: no
         install-helm: no
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.0.0
+      uses: mamezou-tech/setup-helmfile@v1.1.0
       with:
         additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0
 ```
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.0.0
+      uses: mamezou-tech/setup-helmfile@v1.1.0
       with:
         install-helm-plugins: no
 ```
