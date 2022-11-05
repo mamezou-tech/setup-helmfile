@@ -7,19 +7,19 @@ branding:
 inputs:
   kubectl-version:
     description: "kubectl (AWS edition) version"
-    default: "1.22.9"
+    default: "1.23.7"
     required: false
   kubectl-release-date:
     description: "kubectl (AWS edition) release date"
-    default: "2022-06-03"
+    default: "2022-06-29"
     required: false
   helm-version:
     description: "Helm version"
-    default: "v3.9.0"
+    default: "v3.10.1"
     required: false
   helmfile-version:
     description: "helmfile version"
-    default: "v0.145.0"
+    default: "v0.147.0"
     required: false
   install-kubectl:
     description: "Install kubectl"

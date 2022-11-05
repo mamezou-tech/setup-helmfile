@@ -6,7 +6,7 @@ jobs:
   install_all_default:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup helmfile
       uses: ./
     - name: Test
@@ -20,7 +20,7 @@ jobs:
   install_helmfile_with_version:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup helmfile
       uses: ./
       with:
@@ -36,7 +36,7 @@ jobs:
   install_helm_plugins_without_helm:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup helmfile
       uses: ./
       with:
@@ -53,7 +53,7 @@ jobs:
   install_only_helmfile:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup helmfile
       uses: ./
       with:
@@ -71,7 +71,7 @@ jobs:
   install_addtional_plugins:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup helmfile
       uses: ./
       with:
