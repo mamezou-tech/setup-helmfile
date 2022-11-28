@@ -31,7 +31,7 @@ jobs:
 ## Optional Inputs
 - `helmfile-version` : helmfile version. Default `"v0.148.1"`.
 - `helm-version` : Helm version. Default `"v3.10.2"`
-- `kubectl-version` : kubectl version. Default `1.25.4`
+- `kubectl-version` : kubectl version. Default `1.24.7`
 - `kubectl-release-date` : kubectl release date. Default `2022-11-09`
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
