@@ -4,7 +4,7 @@ const io = require("@actions/io");
 const path = require("path");
 const os = require("os");
 const sp = path.sep;
-const { installKubectl, installHelm, installHelmfile } = require("./setup");
+const { installKubectl, installHelm, installHelmfile, installHelmPlugins } = require("./setup");
 
 describe('Normal', () => {
   let downloadToolMock;

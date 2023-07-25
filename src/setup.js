@@ -19,9 +19,35 @@ async function installHelm(version) {
   await install(`${folder}/linux-amd64/helm`, "helm");
 }
 
+async function installSingularHelmPlugin(plugin){
+  let myOutput = '';
+  let myError = '';
+  const options = {
+    ignoreReturnCode: false
+  };
+  options.listeners = {
+    stdout: (data) => {
+      myOutput += data.toString();
+
+    },
+    stderr: (data) => {
+      myError += data.toString();
+
+    }
+  };
+
+  try {
+    await exec.exec(`helm plugin install ${plugin}`, null, options);
+    console.log(myOutput)
+  }catch (e) {
+    console.log(e)
+    console.log(myError)
+  }
+}
+
 async function installHelmPlugins(plugins) {
   for (const plugin of plugins) {
-    await exec.exec(`helm plugin install ${plugin}`);
+   await installSingularHelmPlugin(plugin);
   }
 }
 
