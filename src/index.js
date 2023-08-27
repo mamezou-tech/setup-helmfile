@@ -17,7 +17,7 @@ async function run() {
     }
     const additionalPlugins = core.getInput("additional-helm-plugins")
     if (additionalPlugins !== "") {
-      installHelmPlugins(additionalPlugins.split(','));
+      installHelmPlugins(additionalPlugins.split(',').map(str => str.trim());
     }
     installHelmfile(core.getInput("helmfile-version"));
   } catch (error) {
