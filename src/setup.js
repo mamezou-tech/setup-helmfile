@@ -4,7 +4,7 @@ const exec = require("@actions/exec");
 const io = require("@actions/io");
 const path = require("path");
 const os = require("os");
-const semvercompare = require("semver-compare");
+const { compareVersions } = require("compare-versions");
 
 async function installKubectl(version, releaseDate) {
   const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
@@ -26,7 +26,7 @@ async function installHelmPlugins(plugins) {
 }
 
 async function installHelmfile(version) {
-  if (semvercompare(version.replace(/^v/,''), "0.145.0") >= 0) {
+  if (compareVersions(version.replace(/^v/,''), "0.145.0") >= 0) {
     await installHelmfileNew(version);
   } else {
     await installHelmfileOld(version);
