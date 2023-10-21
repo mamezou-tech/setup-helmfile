@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.2.0
+      uses: mamezou-tech/setup-helmfile@v1.3.0
     - name: Test
       run: |
         helmfile --version
@@ -29,10 +29,10 @@ jobs:
 ```
 
 ## Optional Inputs
-- `helmfile-version` : helmfile version. Default `"v0.148.1"`.
-- `helm-version` : Helm version. Default `"v3.10.2"`
-- `kubectl-version` : kubectl version. Default `1.24.7`
-- `kubectl-release-date` : kubectl release date. Default `2022-11-09`
+- `helmfile-version` : helmfile version. Default `"v0.157.0"`.
+- `helm-version` : Helm version. Default `"v3.13.1"`
+- `kubectl-version` : kubectl version. Default `1.28.1`
+- `kubectl-release-date` : kubectl release date. Default `2023-09-14`
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
 - `install-helm-plugins` : Install Helm plugins. Default `yes`
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.2.0
+      uses: mamezou-tech/setup-helmfile@v1.3.0
       with:
         helmfile-version: "v0.135.0"
 ```
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.2.0
+      uses: mamezou-tech/setup-helmfile@v1.3.0
       with:
         install-kubectl: no
         install-helm: no
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.2.0
+      uses: mamezou-tech/setup-helmfile@v1.3.0
       with:
         additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0
 ```
@@ -94,14 +94,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.2.0
+      uses: mamezou-tech/setup-helmfile@v1.3.0
       with:
         install-helm-plugins: no
 ```
 
 ### Build action (for maintainer)
 ```
-$ npm install
-$ npm run package
+npm install
+npm run package
 ```
 > `dist/index.js` shoud be included in commit.
