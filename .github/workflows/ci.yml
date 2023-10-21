@@ -12,9 +12,9 @@ jobs:
     - name: Test
       run: |
         ls -l ~/bin
-        helmfile --version | grep 0.148.1
-        kubectl version --client --short | grep 1.24.7
-        helm version | grep v3.10.2
+        helmfile --version | grep 0.157.0
+        kubectl version --client | grep 1.28.1
+        helm version | grep v3.13.1
         helm plugin list | grep diff
         helm plugin list | grep s3
 
