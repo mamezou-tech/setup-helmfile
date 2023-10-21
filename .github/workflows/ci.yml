@@ -64,8 +64,8 @@ jobs:
         install-helm-plugins: no
     - name: Test
       run: |
-        ls -l ~/bin | wc -l | grep 1
-        helmfile --version
+        ls -l ~/bin | wc -l | grep 2
+        helmfile --version | grep 0.157.0
         kubectl version --client
         helm version
         helm plugin list | wc -l | grep 1
