@@ -46,5 +46,5 @@ inputs:
       A comma separated list of additional helm plugins to install. Should be a valid argument after `helm plugin install`.
     required: false
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/index.js"
