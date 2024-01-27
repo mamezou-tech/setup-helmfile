@@ -28,6 +28,9 @@ jobs:
         kubectl version --client
 ```
 
+> [!NOTE]
+> This action requires Node 20 or later on the runner. If you are using GitHub-managed runners, no action is needed. If you are using self-hosted runners, make sure the system version of Node is version 20 or higher.
+
 ## Optional Inputs
 - `helmfile-version` : helmfile version. Default `"v0.161.0"`.
 - `helm-version` : Helm version. Default `"v3.14.0"`
