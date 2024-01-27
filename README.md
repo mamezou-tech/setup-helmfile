@@ -5,6 +5,7 @@
 
 Setup [helmfile](https://github.com/helmfile/helmfile) with Helm and kubectl in GitHub Actions workflow.
 
+> [!NOTE]
 > - This action works on Linux.
 > - The AWS version of kubectl will be installed.
 > - Following Helm plugins will be installed
@@ -28,7 +29,7 @@ jobs:
         kubectl version --client
 ```
 
-> [!NOTE]
+> [!Important]
 > This action requires Node 20 or later on the runner. If you are using GitHub-managed runners, no action is needed. If you are using self-hosted runners, make sure the system version of Node is version 20 or higher.
 
 ## Optional Inputs
