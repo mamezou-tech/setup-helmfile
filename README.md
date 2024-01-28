@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v1.3.0
+      uses: mamezou-tech/setup-helmfile@v2.0.0
     - name: Test
       run: |
         helmfile --version
