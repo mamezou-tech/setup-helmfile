@@ -5,12 +5,11 @@
 
 Setup [helmfile](https://github.com/helmfile/helmfile) with Helm and kubectl in GitHub Actions workflow.
 
-> [!NOTE]
-> - This action works on Linux.
-> - The AWS version of kubectl will be installed.
-> - Following Helm plugins will be installed
->   - helm-diff
->   - helm-s3
+- This action works on Linux runner.
+- The AWS version of kubectl will be installed.
+- Following Helm plugins will be installed
+  - helm-diff
+  - helm-s3
 
 ```yaml
 name: CI
