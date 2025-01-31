@@ -35,11 +35,11 @@ inputs:
     required: false
   helm-diff-plugin-version:
     description: "Version of the helm diff plugin to install"
-    default: "master"
+    default: "v3.9.14"
     required: false
   helm-s3-plugin-version:
     description: "Version of the helm s3 plugin to install"
-    default: "master"
+    default: "v0.16.2"
     required: false
   additional-helm-plugins:
     description: |
