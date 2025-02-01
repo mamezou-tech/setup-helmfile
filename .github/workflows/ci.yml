@@ -12,9 +12,9 @@ jobs:
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 4
-        helmfile --version | grep 0.161.0
+        helmfile --version | grep 0.170.1
         kubectl version --client | grep 1.29.0
-        helm version | grep v3.14.0
+        helm version | grep 3.17.0
         helm plugin list | grep diff
         helm plugin list | grep s3
 
@@ -30,8 +30,8 @@ jobs:
       run: |
         ls -l ~/bin | wc -l | grep 4
         helmfile --version | grep 0.135.0
-        kubectl version --client | grep 1.29.0
-        helm version | grep v3.14.0
+        kubectl version --client | grep 1.31.0
+        helm version | grep 3.17.0
         helm plugin list | grep diff
         helm plugin list | grep s3
 
@@ -47,7 +47,7 @@ jobs:
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 2
-        helmfile --version | grep 0.161.0
+        helmfile --version | grep 0.170.1
         kubectl version --client
         helm plugin list | grep diff
         helm plugin list | grep s3
@@ -65,7 +65,7 @@ jobs:
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 2
-        helmfile --version | grep 0.161.0
+        helmfile --version | grep 0.170.1
         kubectl version --client
         helm version
         helm plugin list | wc -l | grep 1
@@ -81,9 +81,9 @@ jobs:
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 4
-        helmfile --version | grep 0.161.0
-        kubectl version --client | grep 1.29.0
-        helm version | grep v3.14.0
+        helmfile --version | grep 0.170.1
+        kubectl version --client | grep 1.31.0
+        helm version | grep 3.17.0
         helm plugin list | grep diff
         helm plugin list | grep helm-git
         helm plugin list | grep s3

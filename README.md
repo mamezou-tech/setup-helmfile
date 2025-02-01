@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v2.0.0
+      uses: mamezou-tech/setup-helmfile@v2.1.0
     - name: Test
       run: |
         helmfile --version
@@ -32,15 +32,15 @@ jobs:
 > This action requires Node 20 or later on the runner. If you are using GitHub-managed runners, no action is needed. If you are using self-hosted runners, make sure the system version of Node is version 20 or higher.
 
 ## Optional Inputs
-- `helmfile-version` : helmfile version. Default `"v0.161.0"`.
-- `helm-version` : Helm version. Default `"v3.14.0"`
-- `kubectl-version` : kubectl version. Default `1.29.0`
-- `kubectl-release-date` : kubectl release date. Default `2024-01-04`
+- `helmfile-version` : helmfile version. Default `"v0.170.1"`.
+- `helm-version` : Helm version. Default `"v3.17.0"`
+- `kubectl-version` : kubectl version. Default `1.31.0`
+- `kubectl-release-date` : kubectl release date. Default `2024-11-15`
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
 - `install-helm-plugins` : Install Helm plugins. Default `yes`
-- `helm-diff-plugin-version` : Plugin version to install. Default `master`
-- `helm-s3-plugin-version` : Plugin version to install. Default `master`
+- `helm-diff-plugin-version` : Plugin version to install. Default `v3.9.14`
+- `helm-s3-plugin-version` : Plugin version to install. Default `v0.16.2`
 - `additional-helm-plugins` : A comma separated list of additional helm plugins to install. Should be a valid argument after `helm plugin install`.
 
 > See "[Installing kubectl - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)" for information how to specify the kubectl version.
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v2.0.0
+      uses: mamezou-tech/setup-helmfile@v2.1.0
       with:
         helmfile-version: "v0.135.0"
 ```
@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v2.0.0
+      uses: mamezou-tech/setup-helmfile@v2.1.0
       with:
         install-kubectl: no
         install-helm: no
@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v2.0.0
+      uses: mamezou-tech/setup-helmfile@v2.1.0
       with:
         additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0
 ```
@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v2.0.0
+      uses: mamezou-tech/setup-helmfile@v2.1.0
       with:
         install-helm-plugins: no
 ```
