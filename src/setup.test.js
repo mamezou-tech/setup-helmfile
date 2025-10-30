@@ -38,6 +38,11 @@ describe('Normal', () => {
     expect(downloadToolMock.mock.calls[0][0]).toBe("https://get.helm.sh/helm-v3.0.3-linux-amd64.tar.gz");
     expect(cpMock.mock.calls[0][1]).toBe(`${os.homedir}${sp}bin${sp}helm`);
   });
+  test('Test installHelm from Huawei', async () => {
+    await installHelm("v3.0.3", "https://repo.huaweicloud.com/helm/{version}/helm-{version}-linux-amd64.tar.gz");
+    expect(downloadToolMock.mock.calls[0][0]).toBe("https://repo.huaweicloud.com/helm/v3.0.3/helm-v3.0.3-linux-amd64.tar.gz");
+    expect(cpMock.mock.calls[0][1]).toBe(`${os.homedir}${sp}bin${sp}helm`);
+  });
   test('Test installHelmfile', async () => {
     await installHelmfile("v0.98.3");
     expect(downloadToolMock.mock.calls[0][0]).toBe("https://github.com/roboll/helmfile/releases/download/v0.98.3/helmfile_linux_amd64");

@@ -17,6 +17,10 @@ inputs:
     description: "Helm version"
     default: "v3.17.0"
     required: false
+  helm-download-url:
+    description: "Helm download URL"
+    default: "https://get.helm.sh/helm-{version}-linux-amd64.tar.gz"
+    required: false
   helmfile-version:
     description: "helmfile version"
     default: "v0.170.1"
