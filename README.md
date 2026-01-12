@@ -29,7 +29,7 @@ jobs:
 ```
 
 > [!Important]
-> This action requires Node 20 or later on the runner. If you are using GitHub-managed runners, no action is needed. If you are using self-hosted runners, make sure the system version of Node is version 20 or higher.
+> This action requires Node 24 or later on the runner. If you are using GitHub-managed runners, no action is needed. If you are using self-hosted runners, make sure the system version of Node is version 24 or higher.
 
 ## Optional Inputs
 - `helmfile-version` : helmfile version. Default `"v1.2.3"`.
@@ -45,6 +45,8 @@ jobs:
 - `additional-helm-plugins` : A comma separated list of additional helm plugins to install. Should be a valid argument after `helm plugin install`.
 
 > See "[Installing kubectl - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)" for information how to specify the kubectl version.
+
+> As of January 2026, specifying helm v4 is not recommended as plugin support is not yet fully developed.
 
 Example with optional inputs
 
