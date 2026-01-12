@@ -15,7 +15,7 @@ inputs:
     required: false
   helm-version:
     description: "Helm version"
-    default: "v4.0.4"
+    default: "v3.19.4"
     required: false
   helm-download-url:
     description: "Helm download URL"

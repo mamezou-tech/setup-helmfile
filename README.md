@@ -33,7 +33,7 @@ jobs:
 
 ## Optional Inputs
 - `helmfile-version` : helmfile version. Default `"v1.2.3"`.
-- `helm-version` : Helm version. Default `"v4.0.4"`
+- `helm-version` : Helm version. Default `"v3.19.4"`
 - `helm-download-url` : Helm download URL. Default `"https://get.helm.sh/helm-{version}-linux-amd64.tar.gz"`
 - `kubectl-version` : kubectl version. Default `1.34.2`
 - `kubectl-release-date` : kubectl release date. Default `2025-11-13`

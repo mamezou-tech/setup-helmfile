@@ -22,7 +22,7 @@ async function installHelm(version, downloadUrl = "https://get.helm.sh/helm-{ver
 
 async function installHelmPlugins(plugins) {
   for (const plugin of plugins) {
-    await exec.exec(`helm plugin install ${plugin} --verify=false`);
+    await exec.exec(`helm plugin install ${plugin}`);
   }
 }
 
