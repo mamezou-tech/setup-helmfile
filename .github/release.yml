@@ -2,6 +2,7 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
+      - dependencies
   categories:
     - title: Breaking Changes 🛠
       labels:
