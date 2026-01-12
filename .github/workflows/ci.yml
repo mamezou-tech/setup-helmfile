@@ -6,22 +6,22 @@ jobs:
   install_all_default:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup helmfile
       uses: ./
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 4
-        helmfile --version | grep 0.170.1
-        kubectl version --client | grep 1.32.0
-        helm version | grep 3.17.0
+        helmfile --version | grep 1.2.3
+        kubectl version --client | grep 1.34.2
+        helm version | grep 4.0.4
         helm plugin list | grep diff
         helm plugin list | grep s3
 
   install_helmfile_with_version:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup helmfile
       uses: ./
       with:
@@ -30,15 +30,15 @@ jobs:
       run: |
         ls -l ~/bin | wc -l | grep 4
         helmfile --version | grep 0.135.0
-        kubectl version --client | grep 1.32.0
-        helm version | grep 3.17.0
+        kubectl version --client | grep 1.34.2
+        helm version | grep 4.0.4
         helm plugin list | grep diff
         helm plugin list | grep s3
 
   install_only_helmfile:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup helmfile
       uses: ./
       with:
@@ -47,7 +47,7 @@ jobs:
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 2
-        helmfile --version | grep 0.170.1
+        helmfile --version | grep 1.2.3
         kubectl version --client
         helm plugin list | grep diff
         helm plugin list | grep s3
@@ -55,7 +55,7 @@ jobs:
   install_only_helmfile_without_plugins:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup helmfile
       uses: ./
       with:
@@ -65,7 +65,7 @@ jobs:
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 2
-        helmfile --version | grep 0.170.1
+        helmfile --version | grep 1.2.3
         kubectl version --client
         helm version
         helm plugin list | wc -l | grep 1
@@ -73,7 +73,7 @@ jobs:
   install_addtional_plugins:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Setup helmfile
       uses: ./
       with:
@@ -81,9 +81,9 @@ jobs:
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 4
-        helmfile --version | grep 0.170.1
-        kubectl version --client | grep 1.32.0
-        helm version | grep 3.17.0
+        helmfile --version | grep 1.2.3
+        kubectl version --client | grep 1.34.2
+        helm version | grep 4.0.4
         helm plugin list | grep diff
         helm plugin list | grep helm-git
         helm plugin list | grep s3

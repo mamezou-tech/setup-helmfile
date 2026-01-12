@@ -7,15 +7,15 @@ branding:
 inputs:
   kubectl-version:
     description: "kubectl (AWS edition) version"
-    default: "1.32.0"
+    default: "1.34.2"
     required: false
   kubectl-release-date:
     description: "kubectl (AWS edition) release date"
-    default: "2025-01-10"
+    default: "2025-11-13"
     required: false
   helm-version:
     description: "Helm version"
-    default: "v3.17.0"
+    default: "v4.0.4"
     required: false
   helm-download-url:
     description: "Helm download URL"
@@ -23,7 +23,7 @@ inputs:
     required: false
   helmfile-version:
     description: "helmfile version"
-    default: "v0.170.1"
+    default: "v1.2.3"
     required: false
   install-kubectl:
     description: "Install kubectl"
@@ -39,16 +39,16 @@ inputs:
     required: false
   helm-diff-plugin-version:
     description: "Version of the helm diff plugin to install"
-    default: "v3.9.14"
+    default: "v3.14.1"
     required: false
   helm-s3-plugin-version:
     description: "Version of the helm s3 plugin to install"
-    default: "v0.16.2"
+    default: "v0.17.1"
     required: false
   additional-helm-plugins:
     description: |
       A comma separated list of additional helm plugins to install. Should be a valid argument after `helm plugin install`.
     required: false
 runs:
-  using: "node20"
+  using: "node24"
   main: "dist/index.js"
