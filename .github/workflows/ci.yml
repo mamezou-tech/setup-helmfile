@@ -77,7 +77,7 @@ jobs:
     - name: Setup helmfile
       uses: ./
       with:
-        additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0,https://github.com/zendesk/helm-secrets
+        additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 1.5.0,https://github.com/zendesk/helm-secrets
     - name: Test
       run: |
         ls -l ~/bin | wc -l | grep 4

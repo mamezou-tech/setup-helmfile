@@ -87,7 +87,7 @@ jobs:
     - name: Setup helmfile
       uses: mamezou-tech/setup-helmfile@v2.2.0
       with:
-        additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 0.10.0
+        additional-helm-plugins: https://github.com/aslafy-z/helm-git --version 1.5.1
 ```
 
 If you don't want helm plugins installed, specify `no` for `install-helm-plugins`.
