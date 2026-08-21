@@ -6,6 +6,32 @@ const path = require("path");
 const os = require("os");
 const { compareVersions } = require("compare-versions");
 
+// Aliases accepted for the `helmfile-arch` input, mapped to the architecture
+// name used in helmfile's Linux release assets. helmfile only publishes
+// linux_amd64, linux_arm64 and linux_386, so nothing else is accepted.
+const ARCH_ALIASES = {
+  amd64: "amd64",
+  x64: "amd64",
+  x86_64: "amd64",
+  arm64: "arm64",
+  aarch64: "arm64",
+  "386": "386",
+  i386: "386",
+  ia32: "386",
+  x86: "386",
+};
+
+function resolveArch(arch) {
+  const requested = (arch || os.arch()).trim().toLowerCase();
+  const resolved = ARCH_ALIASES[requested];
+  if (!resolved) {
+    throw new Error(
+      `Unsupported architecture: "${requested}". Supported values are: ${Object.keys(ARCH_ALIASES).join(", ")}.`
+    );
+  }
+  return resolved;
+}
+
 async function installKubectl(version, releaseDate) {
   const baseUrl = "https://amazon-eks.s3-us-west-2.amazonaws.com";
   const downloadPath = await download(`${baseUrl}/${version}/${releaseDate}/bin/linux/amd64/kubectl`);
@@ -26,23 +52,24 @@ async function installHelmPlugins(plugins) {
   }
 }
 
-async function installHelmfile(version) {
+async function installHelmfile(version, arch) {
+  const resolvedArch = resolveArch(arch);
   if (compareVersions(version.replace(/^v/,''), "0.145.0") >= 0) {
-    await installHelmfileNew(version);
+    await installHelmfileNew(version, resolvedArch);
   } else {
-    await installHelmfileOld(version);
+    await installHelmfileOld(version, resolvedArch);
   }
 }
 
-async function installHelmfileOld(version) {
+async function installHelmfileOld(version, arch) {
   const baseUrl = "https://github.com/roboll/helmfile/releases/download"
-  const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_amd64`);
+  const downloadPath = await download(`${baseUrl}/${version}/helmfile_linux_${arch}`);
   await install(downloadPath, "helmfile");
 }
 
-async function installHelmfileNew(version) {
+async function installHelmfileNew(version, arch) {
   const baseUrl = "https://github.com/helmfile/helmfile/releases/download"
-  const downloadPath = await download(`${baseUrl}/${version}/helmfile_${version.replace(/^v/,'')}_linux_amd64.tar.gz`)
+  const downloadPath = await download(`${baseUrl}/${version}/helmfile_${version.replace(/^v/,'')}_linux_${arch}.tar.gz`)
   const folder = await extract(downloadPath);
   console.log(folder);
   await install(`${folder}/helmfile`, "helmfile");
@@ -72,5 +99,6 @@ module.exports = {
   installKubectl,
   installHelm,
   installHelmPlugins,
-  installHelmfile
+  installHelmfile,
+  resolveArch
 }

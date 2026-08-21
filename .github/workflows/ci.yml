@@ -70,6 +70,22 @@ jobs:
         helm version
         helm plugin list | wc -l | grep 1
 
+  install_helmfile_with_arch:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Setup helmfile
+      uses: ./
+      with:
+        install-kubectl: no
+        install-helm: no
+        install-helm-plugins: no
+        helmfile-arch: amd64
+    - name: Test
+      run: |
+        helmfile --version | grep 1.2.3
+        file ~/bin/helmfile | grep x86-64
+
   install_addtional_plugins:
     runs-on: ubuntu-latest
     steps:
