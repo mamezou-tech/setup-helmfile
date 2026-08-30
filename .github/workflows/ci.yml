@@ -86,6 +86,21 @@ jobs:
         helmfile --version | grep 1.2.3
         file ~/bin/helmfile | grep x86-64
 
+  install_helmfile_on_arm_runner:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: actions/checkout@v6
+    - name: Setup helmfile
+      uses: ./
+      with:
+        install-kubectl: no
+        install-helm: no
+        install-helm-plugins: no
+    - name: Test
+      run: |
+        helmfile --version | grep 1.2.3
+        file ~/bin/helmfile | grep aarch64
+
   install_addtional_plugins:
     runs-on: ubuntu-latest
     steps:
