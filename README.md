@@ -64,7 +64,7 @@ jobs:
         helmfile-version: "v0.135.0"
 ```
 
-By default helmfile is downloaded for the architecture of the runner, so ARM runners (for example `ubuntu-24.04-arm`) work without extra configuration. Use `helmfile-arch` to download a different architecture.
+By default helmfile is downloaded for the architecture of the runner, so ARM runners (for example `ubuntu-24.04-arm`) work without extra configuration:
 
 ```yaml
 jobs:
@@ -74,10 +74,24 @@ jobs:
     - name: Setup helmfile
       uses: mamezou-tech/setup-helmfile@v2.2.0
       with:
-        helmfile-arch: arm64
+        install-kubectl: no
+        install-helm: no
 ```
 
 > Note: kubectl and Helm are still installed as `amd64` builds. On an ARM runner, set `install-kubectl: no` / `install-helm: no` and install them separately, or point `helm-download-url` at an ARM archive.
+
+Use `helmfile-arch` to override the detected architecture, for example to download an `arm64` binary on an `amd64` runner:
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup helmfile
+      uses: mamezou-tech/setup-helmfile@v2.2.0
+      with:
+        helmfile-arch: arm64
+```
 
 If you are not particular about the version of kubectl / Helm and you can use the versions pre-installed on GitHub Actions runner, you can specify inputs not to install them.
 
