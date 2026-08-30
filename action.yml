@@ -25,6 +25,12 @@ inputs:
     description: "helmfile version"
     default: "v1.2.3"
     required: false
+  helmfile-arch:
+    description: |
+      Architecture of the helmfile binary to download (one of `amd64`, `arm64`, `386`).
+      Defaults to the architecture of the runner.
+    default: ""
+    required: false
   install-kubectl:
     description: "Install kubectl"
     default: "yes"
