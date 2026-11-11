@@ -4,7 +4,7 @@ const io = require("@actions/io");
 const path = require("path");
 const os = require("os");
 const sp = path.sep;
-const { installKubectl, installHelm, installHelmfile, resolveArch } = require("./setup");
+const { installKubectl, installHelm, installHelmPlugins, installHelmfile, resolveArch } = require("./setup");
 
 describe('Normal', () => {
   let downloadToolMock;
@@ -83,6 +83,41 @@ describe('Normal', () => {
   test('Test installHelmfile - unsupported arch fails without downloading', async () => {
     await expect(installHelmfile("v1.2.3", "sparc")).rejects.toThrow(/Unsupported architecture: "sparc"/);
     expect(downloadToolMock).not.toHaveBeenCalled();
+  });
+});
+
+describe('installHelmPlugins', () => {
+  test('installs with --verify=false on Helm 4', async () => {
+    const calls = [];
+    exec.exec = jest.fn(async (commandLine, args, options) => {
+      calls.push(commandLine);
+      return 0;
+    });
+    await installHelmPlugins(["https://github.com/databus23/helm-diff"]);
+    expect(calls).toEqual(["helm plugin install https://github.com/databus23/helm-diff --verify=false"]);
+  });
+  test('falls back without --verify on Helm 3', async () => {
+    const calls = [];
+    exec.exec = jest.fn(async (commandLine, args, options) => {
+      calls.push(commandLine);
+      if (commandLine.includes("--verify=false")) {
+        options.listeners.stderr(Buffer.from("Error: unknown flag: --verify\n"));
+        return 1;
+      }
+      return 0;
+    });
+    await installHelmPlugins(["https://github.com/databus23/helm-diff"]);
+    expect(calls).toEqual([
+      "helm plugin install https://github.com/databus23/helm-diff --verify=false",
+      "helm plugin install https://github.com/databus23/helm-diff",
+    ]);
+  });
+  test('surfaces a genuine install failure instead of masking it', async () => {
+    exec.exec = jest.fn(async (commandLine, args, options) => {
+      options.listeners.stderr(Buffer.from("Error: plugin not found\n"));
+      return 1;
+    });
+    await expect(installHelmPlugins(["bad-source"])).rejects.toThrow(/plugin not found/);
   });
 });
 
