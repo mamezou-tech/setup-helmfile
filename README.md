@@ -34,10 +34,10 @@ jobs:
 ## Optional Inputs
 - `helmfile-version` : helmfile version. Default `"v1.2.3"`.
 - `helmfile-arch` : Architecture of the helmfile binary to download. One of `amd64`, `arm64`, `386` (common aliases such as `x86_64`, `aarch64` and `i386` are also accepted). Defaults to the architecture of the runner.
-- `helm-version` : Helm version. Default `"v3.19.4"`
+- `helm-version` : Helm version. Default `"v3.22.1"`
 - `helm-download-url` : Helm download URL. Default `"https://get.helm.sh/helm-{version}-linux-amd64.tar.gz"`
-- `kubectl-version` : kubectl version. Default `1.34.2`
-- `kubectl-release-date` : kubectl release date. Default `2025-11-13`
+- `kubectl-version` : kubectl version. Default `1.36.2`
+- `kubectl-release-date` : kubectl release date. Default `2026-07-05`
 - `install-kubectl` : Install kubectl. Default `yes`
 - `install-helm` : Install Helm. Default `yes`
 - `install-helm-plugins` : Install Helm plugins. Default `yes`
