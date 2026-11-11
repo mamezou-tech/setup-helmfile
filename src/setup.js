@@ -48,8 +48,29 @@ async function installHelm(version, downloadUrl = "https://get.helm.sh/helm-{ver
 
 async function installHelmPlugins(plugins) {
   for (const plugin of plugins) {
-    await exec.exec(`helm plugin install ${plugin}`);
+    await installHelmPlugin(plugin);
   }
+}
+
+async function installHelmPlugin(plugin) {
+  // Helm 4 verifies plugin signatures by default and fails with "unknown
+  // flag" on Helm 3, which has no --verify flag at all. Try the flag Helm 4
+  // needs first, then fall back for Helm 3, instead of branching on version.
+  let stderr = "";
+  const exitCode = await exec.exec(`helm plugin install ${plugin} --verify=false`, [], {
+    ignoreReturnCode: true,
+    listeners: {
+      stderr: (data) => { stderr += data.toString(); },
+    },
+  });
+  if (exitCode === 0) {
+    return;
+  }
+  if (/unknown flag:\s*--verify/.test(stderr)) {
+    await exec.exec(`helm plugin install ${plugin}`);
+    return;
+  }
+  throw new Error(`helm plugin install ${plugin} failed:\n${stderr}`);
 }
 
 async function installHelmfile(version, arch) {
