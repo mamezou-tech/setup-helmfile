@@ -47,7 +47,7 @@ jobs:
 
 > See "[Installing kubectl - Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)" for information how to specify the kubectl version.
 
-> As of January 2026, specifying helm v4 is not recommended as plugin support is not yet fully developed.
+> As of November 2026, Helm plugin installs (`helm-diff`, `helm-s3`, and anything passed via `additional-helm-plugins`) work whether `helm-version` resolves to Helm 3 or Helm 4 — this action tries Helm 4's `--verify=false` first and falls back for Helm 3. The default `helm-version` still pins a Helm 3.x release, pending a wider compatibility pass on `helmfile`'s own use of `helm` under the hood.
 
 Example with optional inputs
 
